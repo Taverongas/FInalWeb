@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cómo llegar a Cabaña La Gabriela en San Bernardo del Viento, Córdoba. Rutas desde Montería, Medellín y aeropuertos cercanos.">
+  <title>Cómo Llegar | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .llegar-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: start;
+    }
+    .route-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      border-left: 5px solid;
+      margin-bottom: 24px;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .route-card:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
+    .route-card.monteria  { border-color: var(--primary); }
+    .route-card.medellin  { border-color: var(--ocean); }
+    .route-card.aeropuerto { border-color: var(--accent); }
+    .route-card__header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .route-card__icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .route-card.monteria  .route-card__icon { background: rgba(230,57,70,0.1); }
+    .route-card.medellin  .route-card__icon { background: rgba(29,111,166,0.1); }
+    .route-card.aeropuerto .route-card__icon { background: rgba(42,157,143,0.1); }
+    .route-card__meta {}
+    .route-card__from {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 2px;
+    }
+    .route-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .route-card__times {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .route-time {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--off-white);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    .route-steps {
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .route-step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+    .route-step:last-child { padding-bottom: 0; }
+    .route-step::before {
+      content: counter(step);
+      counter-increment: step;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+    .route-card.monteria  .route-step::before { background: var(--primary); }
+    .route-card.medellin  .route-step::before { background: var(--ocean); }
+    .route-card.aeropuerto .route-step::before { background: var(--accent); }
+    .route-step::after {
+      content: '';
+      position: absolute;
+      left: 13px;
+      top: 30px;
+      bottom: 0;
+      width: 2px;
+      background: var(--gray-border);
+    }
+    .route-step:last-child::after { display: none; }
+    .route-step__content {}
+    .route-step__action {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .route-step__detail {
+      font-size: 0.82rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+    .route-card__cta {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-border);
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Map section */
+    .map-wrapper {
+      position: sticky;
+      top: 96px;
+    }
+    .map-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 20px;
+    }
+    .map-card__header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .map-card__title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .map-frame {
+      width: 100%;
+      height: 380px;
+      border: none;
+      display: block;
+    }
+    .map-card__footer {
+      padding: 16px 24px;
+      background: var(--off-white);
+      font-size: 0.82rem;
+      color: var(--gray);
+    }
+    .map-card__coords {
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--ocean);
+      font-weight: 600;
+    }
+
+    .quick-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .quick-info-card {
+      padding: 16px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-xs);
+      text-align: center;
+    }
+    .quick-info-card__icon { font-size: 1.8rem; margin-bottom: 6px; }
+    .quick-info-card__value {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .quick-info-card__label {
+      font-size: 0.72rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, rgba(255,183,3,0.12), rgba(244,162,97,0.12));
+      border: 1px solid rgba(255,183,3,0.3);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 0.875rem;
+    }
+    .tip-box__icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .tip-box__text { color: var(--dark); line-height: 1.5; }
+    .tip-box__text strong { color: var(--sun-dark); }
+
+    @media (max-width: 1024px) {
+      .llegar-layout { grid-template-columns: 1fr; }
+      .map-wrapper { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar solid" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+    <div class="navbar__links">
+      <a href="index.html"        class="navbar__link">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link">Galería</a>
+      <a href="lugares.html"      class="navbar__link">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link active">Cómo Llegar</a>
+    </div>
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta">Reservar</a>
+    </div>
+    <button class="navbar__hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px;align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <span class="page-hero__eyebrow" data-es="Playa Venado · Ruta entre Moñitos y San Bernardo" data-en="Playa Venado · Route between Moñitos and San Bernardo">Playa Venado · Ruta entre Moñitos y San Bernardo</span>
+      <h1 data-es="Cómo Llegar" data-en="How to Arrive">Cómo Llegar</h1>
+      <p data-es="Te explicamos cómo llegar a la cabaña desde Montería, Medellín y los aeropuertos más cercanos." data-en="We explain how to get to the cabin from Montería, Medellín, and the nearest airports.">
+        Te explicamos cómo llegar a la cabaña desde Montería, Medellín y los aeropuertos más cercanos.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html">Inicio</a>
+        <span>›</span>
+        <span>Cómo Llegar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="section" style="background: var(--off-white);">
+  <div class="container">
+    <div class="llegar-layout">
+
+      <!-- ROUTES -->
+      <div>
+        <!-- Tips -->
+        <div class="tip-box fade-in">
+          <div class="tip-box__icon">💡</div>
+          <div class="tip-box__text" data-es-html="<strong>Consejo:</strong> La cabaña está en Playa Venado, sobre la ruta costera entre Moñitos y San Bernardo del Viento. Al acercarte, busca la señal de la playa y sigue hacia el mar. Si tienes dudas, escríbenos por WhatsApp." data-en-html="<strong>Tip:</strong> The cabin is at Playa Venado, on the coastal route between Moñitos and San Bernardo del Viento. As you approach, look for the beach sign and head toward the sea. If in doubt, message us on WhatsApp.">
+            <strong>Consejo:</strong> La cabaña está en Playa Venado, sobre la ruta costera entre Moñitos y San Bernardo del Viento. Al acercarte, busca la señal de la playa y sigue hacia el mar. Si tienes dudas, escríbenos por WhatsApp.
+          </div>
+        </div>
+
+        <!-- Desde Montería -->
+        <div class="route-card monteria fade-in">
+          <div class="route-card__header">
+            <div class="route-card__icon">🚗</div>
+            <div class="route-card__meta">
+              <div class="route-card__from" data-es="Ruta terrestre" data-en="Land route">Ruta terrestre</div>
+              <h2 class="route-card__title" data-es="Desde Montería" data-en="From Montería">Desde Montería</h2>
+            </div>
+          </div>
+          <div class="route-card__times">
+            <div class="route-time">⏱️ <span data-es="~2 horas en carro" data-en="~2 hours by car">~2 horas en carro</span></div>
+            <div class="route-time">📍 <span data-es="~100 km aproximadamente" data-en="~100 km approximately">~100 km aprox.</span></div>
+          </div>
+          <div class="route-steps">
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Salir de Montería por la ruta a la costa" data-en="Leave Montería toward the coast">Salir de Montería hacia la costa</div>
+                <div class="route-step__detail" data-es="Toma la vía principal hacia Lorica y continúa hacia la costa caribeña." data-en="Take the main road toward Lorica and continue toward the Caribbean coast.">Toma la vía principal hacia Lorica y continúa hacia la costa caribeña.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Pasar por Lorica" data-en="Pass through Lorica">Pasar por Lorica</div>
+                <div class="route-step__detail" data-es="Continúa por la vía costera en dirección a Moñitos." data-en="Continue on the coastal road toward Moñitos.">Continúa por la vía costera en dirección a Moñitos.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Llegar a Moñitos" data-en="Arrive at Moñitos">Llegar a Moñitos</div>
+                <div class="route-step__detail" data-es="Desde Moñitos toma la ruta costera hacia San Bernardo del Viento." data-en="From Moñitos take the coastal route toward San Bernardo del Viento.">Desde Moñitos toma la ruta costera hacia San Bernardo del Viento.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="🏖️ Playa Venado — ¡Llegaste!" data-en="🏖️ Playa Venado — You're here!">🏖️ Playa Venado — ¡Llegaste!</div>
+                <div class="route-step__detail" data-es="Cabaña La Gabriela está en Playa Venado, sobre la costa, frente al mar." data-en="Cabaña La Gabriela is at Playa Venado, on the coast, facing the sea.">Cabaña La Gabriela está en Playa Venado, frente al mar.</div>
+              </div>
+            </div>
+          </div>
+          <div class="route-card__cta">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=9.35933,-76.00764" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              🗺️ <span data-es="Abrir en Google Maps" data-en="Open in Google Maps">Abrir en Google Maps</span>
+            </a>
+            <a href="https://wa.me/573137549732?text=Hola%2C%20voy%20desde%20Monter%C3%ADa%20%C2%BFc%C3%B3mo%20llego%20a%20la%20caba%C3%B1a%3F" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">
+              📱 <span data-es="Preguntar por WhatsApp" data-en="Ask on WhatsApp">Preguntar por WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Desde Medellín -->
+        <div class="route-card medellin fade-in">
+          <div class="route-card__header">
+            <div class="route-card__icon">✈️</div>
+            <div class="route-card__meta">
+              <div class="route-card__from" data-es="Ruta aérea + terrestre" data-en="Air + land route">Ruta aérea + terrestre</div>
+              <h2 class="route-card__title" data-es="Desde Medellín" data-en="From Medellín">Desde Medellín</h2>
+            </div>
+          </div>
+          <div class="route-card__times">
+            <div class="route-time">✈️ <span data-es="~45 min vuelo a Montería" data-en="~45 min flight to Montería">~45 min vuelo a Montería</span></div>
+            <div class="route-time">🚗 <span data-es="+ ~2 h en carro" data-en="+ ~2 h by car">+ ~2 h en carro</span></div>
+          </div>
+          <div class="route-steps">
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Opción A: Vuelo a Montería" data-en="Option A: Flight to Montería">Opción A: Vuelo a Montería</div>
+                <div class="route-step__detail" data-es="Vuela al Aeropuerto El Caraño de Montería (MTR) — vuelo de ~45 min desde Medellín (JMC/EOH). Es internacional y tiene vuelos frecuentes." data-en="Fly to Aeropuerto El Caraño in Montería (MTR) — ~45 min flight from Medellín. International, with frequent flights.">Vuela al Aeropuerto El Caraño de Montería (MTR) — vuelo de ~45 min. Es internacional con vuelos frecuentes.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Opción B: Vuelo a Tolú" data-en="Option B: Flight to Tolú">Opción B: Vuelo a Tolú</div>
+                <div class="route-step__detail" data-es="El aeropuerto de Tolú es el más cercano a la cabaña (~1.5 h). No es internacional pero puede tener vuelos chárter o pequeñas aerolíneas." data-en="Tolú airport is the closest to the cabin (~1.5 h). Not international but may have charter flights or small airlines.">Tolú es el aeropuerto más cercano (~1.5 h en carro). No es internacional pero está más cerca.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="Rentar carro o tomar transporte" data-en="Rent a car or take transport">Rentar carro o tomar transporte</div>
+                <div class="route-step__detail" data-es="Desde Montería o Tolú, renta un carro o toma transporte hacia San Bernardo del Viento. Es la opción más cómoda." data-en="From Montería or Tolú, rent a car or take transport toward San Bernardo del Viento.">Desde el aeropuerto, renta un carro o toma transporte hacia la ruta costera.</div>
+              </div>
+            </div>
+            <div class="route-step">
+              <div class="route-step__content">
+                <div class="route-step__action" data-es="🏖️ Playa Venado — ¡Llegaste!" data-en="🏖️ Playa Venado — You're here!">🏖️ Playa Venado — ¡Llegaste!</div>
+                <div class="route-step__detail" data-es="Sigue la ruta costera entre Moñitos y San Bernardo del Viento hasta Playa Venado." data-en="Follow the coastal route between Moñitos and San Bernardo del Viento to Playa Venado.">Sigue la ruta costera hasta Playa Venado.</div>
+              </div>
+            </div>
+          </div>
+          <div class="route-card__cta">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=9.35933,-76.00764" target="_blank" rel="noopener" class="btn btn-ocean btn-sm">
+              🗺️ <span data-es="Abrir en Google Maps" data-en="Open in Google Maps">Abrir en Google Maps</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Aeropuertos -->
+        <div class="route-card aeropuerto fade-in">
+          <div class="route-card__header">
+            <div class="route-card__icon">✈️</div>
+            <div class="route-card__meta">
+              <div class="route-card__from" data-es="Referencia de aeropuertos" data-en="Airport reference">Referencia de aeropuertos</div>
+              <h2 class="route-card__title" data-es="Aeropuertos cercanos" data-en="Nearby airports">Aeropuertos cercanos</h2>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="padding:16px; background:var(--off-white); border-radius:var(--radius-sm);">
+              <div style="font-weight:700; color:var(--dark); margin-bottom:6px;" data-es="✈️ Aeropuerto El Caraño — Montería (MTR)" data-en="✈️ El Caraño Airport — Montería (MTR)">✈️ Aeropuerto El Caraño — Montería (MTR)</div>
+              <div style="font-size:0.875rem; color:var(--gray);" data-es="Aeropuerto internacional. Vuelos desde Bogotá, Medellín y otras ciudades. El más recomendado para llegar a la cabaña. Distancia aproximada: ~100 km (~2 h en carro)." data-en="International airport. Flights from Bogotá, Medellín, and other cities. Most recommended for reaching the cabin. Distance: ~100 km (~2 h by car).">
+                Aeropuerto internacional. Vuelos desde Bogotá, Medellín y otras ciudades. Recomendado. ~100 km (~2 h en carro).
+              </div>
+            </div>
+            <div style="padding:16px; background:var(--off-white); border-radius:var(--radius-sm);">
+              <div style="font-weight:700; color:var(--dark); margin-bottom:6px;" data-es="🛫 Aeropuerto de Tolú (TLU)" data-en="🛫 Tolú Airport (TLU)">🛫 Aeropuerto de Tolú (TLU)</div>
+              <div style="font-size:0.875rem; color:var(--gray);" data-es="Aeropuerto más cercano a la cabaña (~1.5 h). No es internacional. Puede tener vuelos chárter o de aerolíneas pequeñas." data-en="Nearest airport to the cabin (~1.5 h). Not international. May have charter or small airline flights.">
+                El más cercano a la cabaña (~1.5 h). No es internacional. Puede tener vuelos chárter.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coordenadas -->
+        <div class="alert alert-info fade-in">
+          <span>📍</span>
+          <div>
+            <strong data-es="Coordenadas GPS de la cabaña:" data-en="Cabin GPS coordinates:">Coordenadas GPS de la cabaña:</strong><br>
+            <code style="font-size:1rem; color:var(--ocean-dark);">9°21'33.6"N 76°00'27.5"W</code><br>
+            <code style="font-size:0.9rem; color:var(--gray);">9.35933, -76.00764</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAP SIDEBAR -->
+      <div class="map-wrapper fade-in-right">
+        <div class="map-card">
+          <div class="map-card__header">
+            <div class="map-card__title" data-es="📍 Cabaña La Gabriela" data-en="📍 Cabaña La Gabriela">📍 Cabaña La Gabriela</div>
+            <a href="https://maps.google.com/?q=9.35933,-76.00764" target="_blank" rel="noopener"
+               style="font-size:0.78rem; color:var(--ocean); font-weight:600;" data-es="Ver en Maps ↗" data-en="View in Maps ↗">Ver en Maps ↗</a>
+          </div>
+
+          <!-- Foto aérea de ubicación -->
+          <img src="img/DJI_0628.jpg" alt="Vista aérea de Cabaña La Gabriela — Playa Venado" loading="lazy" style="width:100%;border-radius:var(--radius-md);margin-bottom:10px;object-fit:cover;max-height:200px;">
+
+          <!-- Google Maps Embed — Coordinates: 9.35933, -76.00764 -->
+          <iframe
+            class="map-frame"
+            id="mapEmbed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d-76.00764!3d9.35933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMjEnMzMuNiJOIDc2wrAwMCcyNy41Ilc!5e0!3m2!1ses!2sco!4v1700000000000"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación Cabaña La Gabriela"
+          ></iframe>
+
+          <div class="map-card__footer">
+            <div class="map-card__coords">9.35933, -76.00764</div>
+            <div style="margin-top:4px;" data-es="Playa Venado · San Bernardo del Viento, Córdoba" data-en="Playa Venado · San Bernardo del Viento, Córdoba">Playa Venado · San Bernardo del Viento, Córdoba</div>
+          </div>
+        </div>
+
+        <!-- Quick info -->
+        <div style="margin-bottom:20px;">
+          <h3 style="font-family:var(--font-heading); font-size:1rem; font-weight:700; margin-bottom:16px; color:var(--dark);" data-es="Distancias aproximadas" data-en="Approximate distances">Distancias aproximadas</h3>
+          <div class="quick-info-grid">
+            <div class="quick-info-card">
+              <div class="quick-info-card__icon">🏙️</div>
+              <div class="quick-info-card__value" data-es="~2 h" data-en="~2 h">~2 h</div>
+              <div class="quick-info-card__label" data-es="Desde Montería" data-en="From Montería">Desde Montería</div>
+            </div>
+            <div class="quick-info-card">
+              <div class="quick-info-card__icon">✈️</div>
+              <div class="quick-info-card__value" data-es="~1.5 h" data-en="~1.5 h">~1.5 h</div>
+              <div class="quick-info-card__label" data-es="Aeropuerto Tolú" data-en="Tolú Airport">Aeropuerto Tolú</div>
+            </div>
+            <div class="quick-info-card">
+              <div class="quick-info-card__icon">🏖️</div>
+              <div class="quick-info-card__value" data-es="0 m" data-en="0 m">0 m</div>
+              <div class="quick-info-card__label" data-es="Del mar" data-en="From sea">Del mar</div>
+            </div>
+            <div class="quick-info-card">
+              <div class="quick-info-card__icon">🌿</div>
+              <div class="quick-info-card__value" data-es="Cerca" data-en="Nearby">Cerca</div>
+              <div class="quick-info-card__label" data-es="San Bernardo" data-en="San Bernardo">San Bernardo</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="https://www.google.com/maps/dir/?api=1&destination=9.35933,-76.00764"
+             target="_blank" rel="noopener"
+             class="btn btn-primary btn-full">
+            🗺️ <span data-es="Cómo llegar (Google Maps)" data-en="Get directions (Google Maps)">Cómo llegar (Google Maps)</span>
+          </a>
+          <a href="https://wa.me/573137549732?text=Hola%2C%20%C2%BFC%C3%B3mo%20llego%20a%20la%20Caba%C3%B1a%20La%20Gabriela%3F"
+             target="_blank" rel="noopener"
+             class="btn btn-whatsapp btn-full">
+            📱 <span data-es="Preguntar por WhatsApp" data-en="Ask on WhatsApp">Preguntar por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p>Tu cabaña tropical frente al Caribe en San Bernardo del Viento.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link sl-whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link sl-instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link sl-tiktok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+            TikTok
+          </a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link sl-facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="lugares.html">Lugares</a></li>
+          <li><a href="reservas.html">Reservar</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <div class="footer__contact-item"><span>📱</span><a href="https://wa.me/573137549732">+57 313 754 9732</a></div>
+        <div class="footer__contact-item"><span>📍</span><span>Playa Venado, San Bernardo del Viento</span></div>
+      </div>
+      <div class="footer__col">
+        <h4>GPS</h4>
+        <div class="footer__contact-item"><span>📐</span><code style="font-size:0.8rem;">9.35933, -76.00764</code></div>
+        <a href="https://maps.google.com/?q=9.35933,-76.00764" target="_blank" rel="noopener" class="btn btn-accent btn-sm mt-16" style="display:inline-flex;">Abrir Maps</a>
+      </div>
+    </div>
+    <div class="footer__bottom"><p>© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia</p></div>
+  </div>
+</footer>
+
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble">¡Escríbenos!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4" target="_blank" rel="noopener" class="whatsapp-float__btn" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>

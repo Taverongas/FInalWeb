@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Habitaciones de Cabaña La Gabriela en San Bernardo del Viento. 7 habitaciones en 2 pisos para más de 40 personas. Frente al mar Caribe en Playa Venado.">
+  <title>Habitaciones | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ===== ROOM DETAIL CARDS ===== */
+    .floor-section { margin-bottom: 80px; }
+    .floor-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid;
+    }
+    .floor-header.piso1 { border-color: var(--ocean); }
+    .floor-header.piso2 { border-color: var(--primary); }
+    .floor-header.piso3 { border-color: var(--sun); }
+    .floor-header__icon {
+      width: 56px; height: 56px;
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .floor-header.piso1 .floor-header__icon { background: rgba(29,111,166,0.12); }
+    .floor-header.piso2 .floor-header__icon { background: rgba(230,57,70,0.12); }
+    .floor-header.piso3 .floor-header__icon { background: rgba(255,183,3,0.15); }
+    .floor-header__text {}
+    .floor-header__eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .floor-header.piso1 .floor-header__eyebrow { color: var(--ocean); }
+    .floor-header.piso2 .floor-header__eyebrow { color: var(--primary); }
+    .floor-header.piso3 .floor-header__eyebrow { color: var(--sun-dark); }
+    .floor-header__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+    .floor-header__summary {
+      margin-left: auto;
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    .floor-header__summary strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      font-family: var(--font-heading);
+      line-height: 1;
+    }
+
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+    .room-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .room-card:hover {
+      border-color: var(--ocean-light);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .room-card__image {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .room-card__image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+    }
+    .room-card__badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--ocean);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .room-card__badge.premium {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    .room-card__content { padding: 22px; }
+    .room-card__number {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .room-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .room-card__features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .room-card__feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--gray);
+    }
+    .room-card__feature span:first-child {
+      width: 24px; height: 24px;
+      background: var(--gray-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .room-card__capacity {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: var(--off-white);
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+    .room-card__cap-item {
+      text-align: center;
+      flex: 1;
+    }
+    .room-card__cap-num {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ocean);
+      display: block;
+      line-height: 1;
+    }
+    .room-card__cap-label {
+      font-size: 0.65rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 3px;
+    }
+
+    /* ===== BATHROOMS INFO ===== */
+    .bathrooms-info {
+      background: var(--off-white);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-left: 4px solid;
+      margin-top: 8px;
+    }
+    .bathrooms-info.piso1 { border-color: var(--ocean); }
+    .bathrooms-info.piso2 { border-color: var(--primary); }
+    .bathrooms-info__icon { font-size: 2.5rem; flex-shrink: 0; }
+    .bathrooms-info__title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .bathrooms-info__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .bathrooms-info__item {
+      padding: 5px 14px;
+      background: white;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--dark);
+      border: 1px solid var(--gray-border);
+    }
+
+    /* ===== TOTAL CAPACITY ===== */
+    .capacity-summary {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--ocean-dark) 100%);
+      border-radius: var(--radius-xl);
+      padding: 56px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+    .capacity-summary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(244,162,97,0.15) 0%, transparent 60%);
+    }
+    .capacity-summary__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .capacity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .capacity-item {
+      padding: 28px 16px;
+      background: rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .capacity-item__num {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--sun);
+      display: block;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .capacity-item__label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.4;
+    }
+    .capacity-note {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .floor-header { flex-wrap: wrap; }
+      .floor-header__summary { margin-left: 0; text-align: left; order: 3; width: 100%; }
+      .capacity-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .capacity-summary { padding: 36px 24px; }
+      .capacity-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar solid" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+    <div class="navbar__links">
+      <a href="index.html"        class="navbar__link" data-es="Inicio"       data-en="Home">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link active" data-es="Habitaciones" data-en="Rooms">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link" data-es="Galería"      data-en="Gallery">Galería</a>
+      <a href="lugares.html"      class="navbar__link" data-es="Lugares"      data-en="Places">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link" data-es="Cómo Llegar"  data-en="How to Arrive">Cómo Llegar</a>
+    </div>
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta" data-es="Reservar" data-en="Book Now">Reservar</a>
+    </div>
+    <button class="navbar__hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px;align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <span class="page-hero__eyebrow" data-es="Cabaña La Gabriela · 3 Pisos" data-en="Cabaña La Gabriela · 3 Floors">Cabaña La Gabriela · 3 Pisos</span>
+      <h1 data-es="Nuestras Habitaciones" data-en="Our Rooms">Nuestras Habitaciones</h1>
+      <p data-es="7 habitaciones en 3 pisos con capacidad para más de 40 personas frente al Caribe colombiano." data-en="7 rooms across 3 floors with capacity for more than 40 people facing the Colombian Caribbean.">
+        7 habitaciones en 3 pisos con capacidad para más de 40 personas frente al Caribe colombiano.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html" data-es="Inicio" data-en="Home">Inicio</a>
+        <span>›</span>
+        <span data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main class="section" style="background: var(--off-white);">
+  <div class="container">
+
+    <!-- ====== PISO 1 ====== -->
+    <div class="floor-section fade-in">
+      <div class="floor-header piso1">
+        <div class="floor-header__icon">🏠</div>
+        <div class="floor-header__text">
+          <div class="floor-header__eyebrow" data-es="Primer Piso" data-en="First Floor">Primer Piso</div>
+          <h2 class="floor-header__title" data-es="Planta baja · Acceso al área social" data-en="Ground floor · Access to social area">Planta baja · Acceso al área social</h2>
+        </div>
+        <div class="floor-header__summary">
+          <strong>3</strong>
+          <span data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+        </div>
+      </div>
+
+      <div class="rooms-grid">
+        <!-- Hab 1 -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0029.jpg" alt="Habitación Caribe — camarote y cama doble" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 1 · Primer Piso" data-en="Room 1 · First Floor">Habitación 1 · Primer Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Caribe" data-en="Caribbean Room">Habitación Caribe</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>📺</span> <span data-es="Televisión" data-en="TV">Televisión</span></div>
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño social compartido" data-en="Shared social bathroom">Baño social compartido</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hab 2 -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0052.jpg" alt="Habitación Turquesa — cama doble" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 2 · Primer Piso" data-en="Room 2 · First Floor">Habitación 2 · Primer Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Turquesa" data-en="Turquoise Room">Habitación Turquesa</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>📺</span> <span data-es="Televisión" data-en="TV">Televisión</span></div>
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño social compartido" data-en="Shared social bathroom">Baño social compartido</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hab 3 -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0025.jpg" alt="Habitación Oceánica — comedor y zona social primer piso" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 3 · Primer Piso" data-en="Room 3 · First Floor">Habitación 3 · Primer Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Oceánica" data-en="Oceanic Room">Habitación Oceánica</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>📺</span> <span data-es="Televisión" data-en="TV">Televisión</span></div>
+              <div class="room-card__feature"><span>🚿</span> <span data-es="1 baño con ducha incluido" data-en="1 bathroom with shower included">1 baño con ducha incluido</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bathrooms-info piso1 fade-in">
+        <div class="bathrooms-info__icon">🚿</div>
+        <div>
+          <div class="bathrooms-info__title" data-es="Baños del Primer Piso" data-en="First Floor Bathrooms">Baños del Primer Piso</div>
+          <div class="bathrooms-info__list">
+            <span class="bathrooms-info__item" data-es="1 baño social compartido" data-en="1 shared social bathroom">1 baño social compartido</span>
+            <span class="bathrooms-info__item" data-es="1 baño con ducha" data-en="1 bathroom with shower">1 baño con ducha</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== PISO 2 ====== -->
+    <div class="floor-section fade-in">
+      <div class="floor-header piso2">
+        <div class="floor-header__icon">🌅</div>
+        <div class="floor-header__text">
+          <div class="floor-header__eyebrow" data-es="Segundo Piso" data-en="Second Floor">Segundo Piso</div>
+          <h2 class="floor-header__title" data-es="Vistas al Caribe · Mayor privacidad" data-en="Caribbean views · More privacy">Vistas al Caribe · Mayor privacidad</h2>
+        </div>
+        <div class="floor-header__summary">
+          <strong>4</strong>
+          <span data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+        </div>
+      </div>
+
+      <div class="rooms-grid">
+        <!-- Hab 4 - con baño privado -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0029.jpg" alt="Habitación Coral — camarote con baño privado" style="width:100%;height:100%;object-fit:cover;">
+            <span class="room-card__badge premium" data-es="Baño Privado" data-en="Private Bath">Baño Privado</span>
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 4 · Segundo Piso" data-en="Room 4 · Second Floor">Habitación 4 · Segundo Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Coral" data-en="Coral Room">Habitación Coral</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4+1</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño privado propio" data-en="Private bathroom">Baño privado propio</span></div>
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>🛏️</span> <span data-es="+1 colchoneta adicional disponible" data-en="+1 additional mattress available">+1 colchoneta adicional disponible</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hab 5 - con baño privado -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0052.jpg" alt="Habitación Antioqueña — cama doble con baño privado" style="width:100%;height:100%;object-fit:cover;">
+            <span class="room-card__badge premium" data-es="Baño Privado" data-en="Private Bath">Baño Privado</span>
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 5 · Segundo Piso" data-en="Room 5 · Second Floor">Habitación 5 · Segundo Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Antioqueña" data-en="Antioquian Room">Habitación Antioqueña</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4+1</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño privado propio" data-en="Private bathroom">Baño privado propio</span></div>
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>🛏️</span> <span data-es="+1 colchoneta adicional disponible" data-en="+1 additional mattress available">+1 colchoneta adicional disponible</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hab 6 -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DSC_0002.jpg" alt="Habitación Tropical — área exterior y balcón" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 6 · Segundo Piso" data-en="Room 6 · Second Floor">Habitación 6 · Segundo Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Tropical" data-en="Tropical Room">Habitación Tropical</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4+1</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño social del piso" data-en="Floor social bathroom">Baño social del piso</span></div>
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>🌊</span> <span data-es="Vista al corredor con brisa" data-en="Breeze corridor view">Vista al corredor con brisa</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hab 7 -->
+        <div class="room-card fade-in">
+          <div class="room-card__image">
+            <img src="img/DJI_0621.jpg" alt="Habitación Palma — vista aérea de la cabaña frente al mar" style="width:100%;height:100%;object-fit:cover;object-position:center 30%;">
+          </div>
+          <div class="room-card__content">
+            <div class="room-card__number" data-es="Habitación 7 · Segundo Piso" data-en="Room 7 · Second Floor">Habitación 7 · Segundo Piso</div>
+            <h3 class="room-card__title" data-es="Habitación Palma" data-en="Palm Room">Habitación Palma</h3>
+            <div class="room-card__capacity">
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">4+1</span>
+                <span class="room-card__cap-label" data-es="Personas" data-en="Guests">Personas</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Cama doble" data-en="Double bed">Cama doble</span>
+              </div>
+              <div class="room-card__cap-item">
+                <span class="room-card__cap-num">1</span>
+                <span class="room-card__cap-label" data-es="Camarote" data-en="Bunk bed">Camarote</span>
+              </div>
+            </div>
+            <div class="room-card__features">
+              <div class="room-card__feature"><span>🚿</span> <span data-es="Baño social del piso" data-en="Floor social bathroom">Baño social del piso</span></div>
+              <div class="room-card__feature"><span>❄️</span> <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></div>
+              <div class="room-card__feature"><span>🌊</span> <span data-es="Vista al corredor con brisa" data-en="Breeze corridor view">Vista al corredor con brisa</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bathrooms-info piso2 fade-in">
+        <div class="bathrooms-info__icon">🚿</div>
+        <div>
+          <div class="bathrooms-info__title" data-es="Baños del Segundo Piso" data-en="Second Floor Bathrooms">Baños del Segundo Piso</div>
+          <div class="bathrooms-info__list">
+            <span class="bathrooms-info__item" data-es="2 baños privados (hab. 4 y 5)" data-en="2 private bathrooms (rooms 4 & 5)">2 baños privados (hab. 4 y 5)</span>
+            <span class="bathrooms-info__item" data-es="1 baño social compartido" data-en="1 shared social bathroom">1 baño social compartido</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== PISO 3 ====== -->
+    <div class="floor-section fade-in">
+      <div class="floor-header piso3">
+        <div class="floor-header__icon">☀️</div>
+        <div class="floor-header__text">
+          <div class="floor-header__eyebrow" data-es="Tercer Piso" data-en="Third Floor">Tercer Piso</div>
+          <h2 class="floor-header__title" data-es="Espacio abierto · Vista panorámica 360°" data-en="Open space · 360° panoramic view">Espacio abierto · Vista panorámica 360°</h2>
+        </div>
+        <div class="floor-header__summary">
+          <strong>8</strong>
+          <span data-es="Colchonetas" data-en="Mattresses">Colchonetas</span>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow-sm); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+        <div>
+          <img src="img/Asoleadero.jpg" alt="Tercer piso — asoleadero con vista panorámica 360° al Caribe" style="width:100%;border-radius:var(--radius-lg);object-fit:cover;max-height:320px;">
+        </div>
+        <div>
+          <span class="badge badge-sun mb-16" data-es="Espacio especial" data-en="Special space">Espacio especial</span>
+          <h3 class="heading-md mb-16" data-es="Terraza bajo las estrellas" data-en="Terrace under the stars">Terraza bajo las estrellas</h3>
+          <p class="text-gray mb-24" data-es="El tercer piso ofrece una vista privilegiada del Caribe colombiano. Es un espacio abierto que puede acomodar hasta 8 colchonetas adicionales para grupos muy numerosos. No está dotado como habitación formal — es ideal para jóvenes aventureros." data-en="The third floor offers a privileged view of the Colombian Caribbean. It's an open space that can accommodate up to 8 additional mattresses for very large groups. Not set up as a formal room — ideal for adventurous young guests.">
+            El tercer piso ofrece una vista privilegiada del Caribe colombiano. Es un espacio abierto que puede acomodar hasta 8 colchonetas adicionales para grupos muy numerosos. No está dotado como habitación formal — es ideal para jóvenes aventureros.
+          </p>
+          <div class="amenity-list">
+            <span class="amenity-item">🌅 <span data-es="Vista al mar 360°" data-en="360° sea view">Vista al mar 360°</span></span>
+            <span class="amenity-item">💨 <span data-es="Brisa caribeña" data-en="Caribbean breeze">Brisa caribeña</span></span>
+            <span class="amenity-item">⭐ <span data-es="Cielo estrellado" data-en="Starry sky">Cielo estrellado</span></span>
+            <span class="amenity-item">📋 <span data-es="Consultar precio" data-en="Inquire pricing">Consultar precio</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== CAPACITY SUMMARY ====== -->
+    <div class="capacity-summary fade-in">
+      <h2 class="capacity-summary__title" data-es="Capacidad Total de la Cabaña" data-en="Total Cabin Capacity">Capacidad Total de la Cabaña</h2>
+      <div class="capacity-grid">
+        <div class="capacity-item">
+          <span class="capacity-item__num">7</span>
+          <div class="capacity-item__label" data-es="Habitaciones formales" data-en="Formal rooms">Habitaciones formales</div>
+        </div>
+        <div class="capacity-item">
+          <span class="capacity-item__num">28</span>
+          <div class="capacity-item__label" data-es="Personas en camas (base)" data-en="People in beds (base)">Personas en camas (base)</div>
+        </div>
+        <div class="capacity-item">
+          <span class="capacity-item__num">40+</span>
+          <div class="capacity-item__label" data-es="Máximo con colchonetas" data-en="Maximum with mattresses">Máximo con colchonetas</div>
+        </div>
+        <div class="capacity-item">
+          <span class="capacity-item__num">3</span>
+          <div class="capacity-item__label" data-es="Pisos totales" data-en="Total floors">Pisos totales</div>
+        </div>
+      </div>
+      <p class="capacity-note" data-es="Capacidad base: 4 personas por habitación (1 cama doble + 1 camarote). Se puede ampliar con colchonetas adicionales por habitación (+1 en piso 2) y hasta 8 colchonetas en el tercer piso." data-en="Base capacity: 4 people per room (1 double bed + 1 bunk bed). Can be expanded with additional mattresses per room (+1 on 2nd floor) and up to 8 mattresses on the third floor.">
+        Capacidad base: 4 personas por habitación (1 cama doble + 1 camarote). Se puede ampliar con colchonetas adicionales por habitación (+1 en piso 2) y hasta 8 colchonetas en el tercer piso.
+      </p>
+      <a href="reservas.html" class="btn btn-secondary btn-lg" data-es="Reservar la cabaña completa" data-en="Book the entire cabin">🏖️ Reservar la cabaña completa</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p data-es="Tu cabaña tropical frente al Caribe en San Bernardo del Viento." data-en="Your tropical cabin facing the Caribbean in San Bernardo del Viento.">Tu cabaña tropical frente al Caribe en San Bernardo del Viento.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link sl-whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link sl-instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link sl-tiktok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+            TikTok
+          </a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link sl-facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4 data-es="Navegación" data-en="Navigation">Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="lugares.html">Lugares</a></li>
+          <li><a href="como-llegar.html">Cómo Llegar</a></li>
+          <li><a href="reservas.html">Reservar</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4 data-es="Habitaciones" data-en="Rooms">Habitaciones</h4>
+        <ul>
+          <li><a href="#" data-es="3 habitaciones – Piso 1" data-en="3 rooms – Floor 1">3 habitaciones – Piso 1</a></li>
+          <li><a href="#" data-es="4 habitaciones – Piso 2" data-en="4 rooms – Floor 2">4 habitaciones – Piso 2</a></li>
+          <li><a href="#" data-es="Espacio abierto – Piso 3" data-en="Open space – Floor 3">Espacio abierto – Piso 3</a></li>
+          <li><a href="#" data-es="Capacidad total: 40+" data-en="Total capacity: 40+">Capacidad total: 40+</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4 data-es="Contacto" data-en="Contact">Contacto</h4>
+        <div class="footer__contact-item">
+          <span>📍</span><span>Playa Venado, San Bernardo del Viento, Córdoba</span>
+        </div>
+        <div class="footer__contact-item">
+          <span>📱</span><a href="https://wa.me/573137549732">+57 313 754 9732</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia</p>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble" data-es="¡Reserva aquí!" data-en="Book here!">¡Reserva aquí!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4"
+     target="_blank" rel="noopener" class="whatsapp-float__btn" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>

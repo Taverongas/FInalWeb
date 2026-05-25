@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel Administrador | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: #F0F2F5; font-family: var(--font-body); }
+
+    /* ===== LOGIN ===== */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--ocean-dark) 100%);
+      padding: 24px;
+    }
+    .login-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: var(--shadow-xl);
+      text-align: center;
+    }
+    .login-card__logo { font-size: 3rem; margin-bottom: 8px; }
+    .login-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .login-card__sub { font-size: 0.875rem; color: var(--gray); margin-bottom: 32px; }
+    .login-error {
+      background: rgba(230,57,70,0.08);
+      border: 1px solid rgba(230,57,70,0.3);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      color: var(--primary-dark);
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ===== ADMIN LAYOUT ===== */
+    .admin-wrapper { display: none; min-height: 100vh; flex-direction: column; }
+    .admin-wrapper.visible { display: flex; }
+
+    .admin-topbar {
+      background: var(--dark);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+    }
+    .admin-topbar__logo {
+      font-family: var(--font-script);
+      font-size: 1.3rem;
+      color: white;
+    }
+    .admin-topbar__logo span { font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-left: 8px; }
+    .admin-topbar__actions { display: flex; gap: 12px; align-items: center; }
+    .admin-topbar__user { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+
+    .admin-main { flex: 1; padding: 32px 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-left: 4px solid;
+    }
+    .stat-card.total      { border-color: var(--ocean); }
+    .stat-card.pendientes { border-color: var(--sun); }
+    .stat-card.confirmadas{ border-color: var(--accent); }
+    .stat-card.canceladas { border-color: var(--primary); }
+    .stat-card__icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .stat-card.total       .stat-card__icon { background: rgba(29,111,166,0.12); }
+    .stat-card.pendientes  .stat-card__icon { background: rgba(255,183,3,0.15); }
+    .stat-card.confirmadas .stat-card__icon { background: rgba(42,157,143,0.12); }
+    .stat-card.canceladas  .stat-card__icon { background: rgba(230,57,70,0.1); }
+    .stat-card__data {}
+    .stat-card__num {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--dark);
+    }
+    .stat-card__label { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+    /* Table card */
+    .table-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+    }
+    .table-card__header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray-border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .table-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .table-card__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Search & filters */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--gray-border);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-bar input, .filter-bar select {
+      padding: 8px 14px;
+      border: 2px solid var(--gray-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-family: var(--font-body);
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .filter-bar input { flex: 1; min-width: 200px; }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--ocean); }
+    .filter-count { font-size: 0.82rem; color: var(--gray); margin-left: auto; white-space: nowrap; }
+
+    /* Table styles */
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .admin-table thead { background: #F8F9FA; }
+    .admin-table thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+    .admin-table tbody tr { border-bottom: 1px solid #F0F0F0; transition: background 0.15s; }
+    .admin-table tbody tr:hover { background: #FAFBFF; }
+    .admin-table tbody td { padding: 14px 16px; vertical-align: middle; }
+    .admin-table .td-id { color: var(--gray); font-size: 0.8rem; }
+    .admin-table .td-name { font-weight: 600; color: var(--dark); }
+    .admin-table .td-contact { color: var(--gray); font-size: 0.82rem; }
+    .admin-table .td-dates { font-size: 0.82rem; color: var(--dark); }
+    .admin-table .td-msg { color: var(--gray); font-size: 0.82rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Actions buttons */
+    .action-btns { display: flex; gap: 6px; align-items: center; }
+    .action-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s;
+    }
+    .action-btn.confirm  { background: rgba(42,157,143,0.12); color: var(--accent-dark); }
+    .action-btn.confirm:hover  { background: var(--accent); color: white; }
+    .action-btn.cancel   { background: rgba(255,183,3,0.15); color: #7a5800; }
+    .action-btn.cancel:hover   { background: var(--sun); color: white; }
+    .action-btn.delete   { background: rgba(230,57,70,0.1); color: var(--primary-dark); }
+    .action-btn.delete:hover   { background: var(--primary); color: white; }
+    .action-btn.whatsapp { background: rgba(37,211,102,0.12); color: #1dab55; }
+    .action-btn.whatsapp:hover { background: #25D366; color: white; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--gray);
+    }
+    .empty-state__icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state__text { font-size: 0.95rem; }
+
+    /* Loading */
+    .loading-row td { text-align: center; padding: 48px; color: var(--gray); font-size: 0.9rem; }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pagination__info { font-size: 0.82rem; color: var(--gray); }
+    .pagination__btns { display: flex; gap: 6px; }
+    .pagination__btn {
+      padding: 6px 12px;
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: white;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+    }
+    .pagination__btn:hover { background: var(--ocean); color: white; border-color: var(--ocean); }
+    .pagination__btn.active { background: var(--ocean); color: white; border-color: var(--ocean); }
+    .pagination__btn:disabled { opacity: 0.4; cursor: default; }
+
+    @media (max-width: 768px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .admin-topbar { padding: 0 16px; }
+      .admin-main { padding: 20px 16px; }
+    }
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  LOGIN SCREEN                                                -->
+<!-- ============================================================ -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-card__logo">🌴</div>
+    <div class="login-card__title">Panel Administrador</div>
+    <div class="login-card__sub">Cabaña La Gabriela</div>
+    <div class="login-error" id="loginError">Contraseña incorrecta. Intenta de nuevo.</div>
+    <form id="loginForm">
+      <div class="form-group" style="text-align:left;">
+        <label class="form-label">Contraseña</label>
+        <input type="password" id="adminPassword" class="form-control" placeholder="Ingresa tu contraseña" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-ocean btn-full mt-16">Ingresar →</button>
+    </form>
+    <a href="index.html" style="display:block; margin-top:20px; font-size:0.82rem; color:var(--gray);">← Volver al sitio</a>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!--  ADMIN PANEL                                                 -->
+<!-- ============================================================ -->
+<div class="admin-wrapper" id="adminPanel">
+
+  <!-- Topbar -->
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-topbar__logo">🌴 La Gabriela</span>
+      <span class="admin-topbar__logo"><span>Admin Panel</span></span>
+    </div>
+    <div class="admin-topbar__actions">
+      <span class="admin-topbar__user">Administrador</span>
+      <button class="btn btn-primary btn-sm" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="admin-main">
+
+    <!-- Stats -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card total">
+        <div class="stat-card__icon">📋</div>
+        <div class="stat-card__data">
+          <div class="stat-card__num" id="statTotal">—</div>
+          <div class="stat-card__label">Total reservas</div>
+        </div>
+      </div>
+      <div class="stat-card pendientes">
+        <div class="stat-card__icon">⏳</div>
+        <div class="stat-card__data">
+          <div class="stat-card__num" id="statPendientes">—</div>
+          <div class="stat-card__label">Pendientes</div>
+        </div>
+      </div>
+      <div class="stat-card confirmadas">
+        <div class="stat-card__icon">✅</div>
+        <div class="stat-card__data">
+          <div class="stat-card__num" id="statConfirmadas">—</div>
+          <div class="stat-card__label">Confirmadas</div>
+        </div>
+      </div>
+      <div class="stat-card canceladas">
+        <div class="stat-card__icon">❌</div>
+        <div class="stat-card__data">
+          <div class="stat-card__num" id="statCanceladas">—</div>
+          <div class="stat-card__label">Canceladas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <div class="table-card__title">Reservas</div>
+        <div class="table-card__actions">
+          <button class="btn btn-accent btn-sm" onclick="loadReservas()">🔄 Actualizar</button>
+          <button class="btn btn-ocean btn-sm" onclick="exportarCSV()">📥 Exportar CSV</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar por nombre, teléfono, correo..." oninput="debounceSearch()">
+        <select id="estadoFilter" onchange="loadReservas()">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">⏳ Pendiente</option>
+          <option value="confirmada">✅ Confirmada</option>
+          <option value="cancelada">❌ Cancelada</option>
+        </select>
+        <span class="filter-count" id="filterCount">0 reservas</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Contacto</th>
+              <th>Modalidad</th>
+              <th>Fechas</th>
+              <th>Huéspedes</th>
+              <th>Mensaje</th>
+              <th>Estado</th>
+              <th>Creado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="reservasTableBody">
+            <tr class="loading-row"><td colspan="10">⏳ Cargando reservas...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <div class="pagination__info" id="pageInfo">Página 1</div>
+        <div class="pagination__btns">
+          <button class="pagination__btn" id="prevBtn" onclick="changePage(-1)" disabled>← Anterior</button>
+          <button class="pagination__btn" id="nextBtn" onclick="changePage(1)">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ADMIN JS
+   ============================================================ */
+
+const API = '';  // Si backend corre en mismo origen, dejar vacío.
+                  // Si corre en otro servidor: 'http://localhost:8000'
+
+// Contraseña local (sin backend). Cámbiala si cambias la del backend.
+const LOCAL_PASSWORD = 'gabriela2025';
+
+let currentPage   = 0;
+const PAGE_SIZE   = 20;
+let totalRecords  = 0;
+let searchTimer   = null;
+let authenticated = false;
+let dataMode      = 'api'; // 'api' | 'local'
+
+function enterAdmin(mode) {
+  dataMode = mode;
+  authenticated = true;
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPanel').classList.add('visible');
+  if (mode === 'local') {
+    document.querySelector('.admin-topbar__user').textContent = '⚠️ Modo local (sin servidor)';
+  }
+  loadStats();
+  loadReservas();
+}
+
+/* ===== AUTH ===== */
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pw        = document.getElementById('adminPassword').value;
+  const errorDiv  = document.getElementById('loginError');
+  errorDiv.style.display = 'none';
+
+  // 1. Intentar backend
+  try {
+    const res = await fetch(`${API}/api/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    if (res.ok) { enterAdmin('api'); return; }
+  } catch (_) { /* backend no disponible */ }
+
+  // 2. Verificación local (cuando no hay servidor)
+  if (pw === LOCAL_PASSWORD) { enterAdmin('local'); return; }
+
+  errorDiv.style.display = 'block';
+});
+
+function logout() {
+  authenticated = false;
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('adminPanel').classList.remove('visible');
+  document.getElementById('adminPassword').value = '';
+}
+
+/* ===== STATS ===== */
+async function loadStats() {
+  if (dataMode === 'local') { loadLocalStats(); return; }
+  try {
+    const res = await fetch(`${API}/api/reservas/stats`);
+    const d = await res.json();
+    document.getElementById('statTotal').textContent = d.total;
+    document.getElementById('statPendientes').textContent = d.pendientes;
+    document.getElementById('statConfirmadas').textContent = d.confirmadas;
+    document.getElementById('statCanceladas').textContent = d.canceladas;
+  } catch (err) {
+    loadLocalStats();
+  }
+}
+
+function loadLocalStats() {
+  const rows = getLocalReservas();
+  document.getElementById('statTotal').textContent       = rows.length;
+  document.getElementById('statPendientes').textContent  = rows.filter(r => r.estado === 'pendiente').length;
+  document.getElementById('statConfirmadas').textContent = rows.filter(r => r.estado === 'confirmada').length;
+  document.getElementById('statCanceladas').textContent  = rows.filter(r => r.estado === 'cancelada').length;
+}
+
+function getLocalReservas() {
+  return JSON.parse(localStorage.getItem('cabana_reservas') || '[]');
+}
+
+/* ===== LOAD TABLE ===== */
+async function loadReservas() {
+  if (dataMode === 'local') { loadLocalReservas(); return; }
+
+  const q      = document.getElementById('searchInput').value.trim();
+  const estado = document.getElementById('estadoFilter').value;
+  const params = new URLSearchParams({ limit: PAGE_SIZE, offset: currentPage * PAGE_SIZE });
+  if (q)      params.append('q', q);
+  if (estado) params.append('estado', estado);
+
+  try {
+    const res = await fetch(`${API}/api/reservas?${params}`);
+    const data = await res.json();
+    totalRecords = data.total;
+    renderTable(data.data);
+    updatePagination();
+    document.getElementById('filterCount').textContent = `${data.total} reserva${data.total !== 1 ? 's' : ''}`;
+    loadStats();
+  } catch (err) {
+    // Si el API falla, cambiar a modo local automáticamente
+    dataMode = 'local';
+    loadLocalReservas();
+  }
+}
+
+function loadLocalReservas() {
+  let rows = getLocalReservas();
+  const q      = document.getElementById('searchInput').value.trim().toLowerCase();
+  const estado = document.getElementById('estadoFilter').value;
+
+  if (q) rows = rows.filter(r =>
+    (r.nombre   || '').toLowerCase().includes(q) ||
+    (r.telefono || '').toLowerCase().includes(q) ||
+    (r.correo   || '').toLowerCase().includes(q) ||
+    (r.mensaje  || '').toLowerCase().includes(q)
+  );
+  if (estado) rows = rows.filter(r => r.estado === estado);
+
+  totalRecords = rows.length;
+  const page = rows.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
+  renderTable(page);
+  updatePagination();
+  document.getElementById('filterCount').textContent =
+    `${rows.length} reserva${rows.length !== 1 ? 's' : ''} (guardadas localmente)`;
+  loadLocalStats();
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('reservasTableBody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="10">
+      <div class="empty-state">
+        <div class="empty-state__icon">📭</div>
+        <div class="empty-state__text">No hay reservas que mostrar.</div>
+      </div>
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => `
+    <tr data-id="${r.id}">
+      <td class="td-id">#${r.id}</td>
+      <td class="td-name">${escHtml(r.nombre)}</td>
+      <td>
+        <div class="td-contact">
+          <div>${escHtml(r.telefono || '')}</div>
+          <div>${escHtml(r.correo || '—')}</div>
+        </div>
+      </td>
+      <td>${escHtml(r.modalidad || '—')}</td>
+      <td class="td-dates">
+        <div>↗ ${r.fecha_entrada || '—'}</div>
+        <div>↙ ${r.fecha_salida || '—'}</div>
+      </td>
+      <td>${r.huespedes || '—'}</td>
+      <td class="td-msg" title="${escHtml(r.mensaje || '')}">${escHtml(r.mensaje || '—')}</td>
+      <td>
+        <span class="status-badge status-${r.estado}">${estadoLabel(r.estado)}</span>
+      </td>
+      <td style="font-size:0.78rem; color:var(--gray); white-space:nowrap;">${formatDate(r.fecha_creacion)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="action-btn confirm" onclick="cambiarEstado(${r.id}, 'confirmada')" title="Confirmar">✅</button>
+          <button class="action-btn cancel"  onclick="cambiarEstado(${r.id}, 'cancelada')"  title="Cancelar">⏸</button>
+          <button class="action-btn whatsapp" onclick="abrirWhatsApp('${escHtml(r.telefono || '')}', '${escHtml(r.nombre || '')}')" title="WhatsApp">📱</button>
+          <button class="action-btn delete"  onclick="eliminar(${r.id})" title="Eliminar">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* ===== ACTIONS ===== */
+async function cambiarEstado(id, estado) {
+  if (dataMode === 'local') {
+    const rows = getLocalReservas();
+    const idx = rows.findIndex(r => r.id === id);
+    if (idx !== -1) { rows[idx].estado = estado; localStorage.setItem('cabana_reservas', JSON.stringify(rows)); }
+    loadReservas();
+    return;
+  }
+  try {
+    await fetch(`${API}/api/reservas/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estado })
+    });
+    loadReservas();
+  } catch (err) {
+    alert('Error al cambiar estado. ¿Está el backend activo?');
+  }
+}
+
+async function eliminar(id) {
+  if (!confirm(`¿Eliminar la reserva #${id}? Esta acción no se puede deshacer.`)) return;
+  if (dataMode === 'local') {
+    const rows = getLocalReservas().filter(r => r.id !== id);
+    localStorage.setItem('cabana_reservas', JSON.stringify(rows));
+    loadReservas();
+    return;
+  }
+  try {
+    await fetch(`${API}/api/reservas/${id}`, { method: 'DELETE' });
+    loadReservas();
+  } catch (err) {
+    alert('Error al eliminar. ¿Está el backend activo?');
+  }
+}
+
+function abrirWhatsApp(tel, nombre) {
+  const num = tel.replace(/\D/g, '');
+  const msg = encodeURIComponent(`Hola ${nombre}, te escribimos desde Cabaña La Gabriela 🌴 sobre tu reserva.`);
+  window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
+}
+
+/* ===== PAGINATION ===== */
+function changePage(dir) {
+  const maxPage = Math.ceil(totalRecords / PAGE_SIZE) - 1;
+  currentPage = Math.max(0, Math.min(currentPage + dir, maxPage));
+  loadReservas();
+}
+
+function updatePagination() {
+  const maxPage = Math.ceil(totalRecords / PAGE_SIZE);
+  document.getElementById('pageInfo').textContent = `Página ${currentPage + 1} de ${Math.max(1, maxPage)}`;
+  document.getElementById('prevBtn').disabled = currentPage === 0;
+  document.getElementById('nextBtn').disabled = (currentPage + 1) * PAGE_SIZE >= totalRecords;
+}
+
+/* ===== SEARCH DEBOUNCE ===== */
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  currentPage = 0;
+  searchTimer = setTimeout(loadReservas, 350);
+}
+
+/* ===== HELPERS ===== */
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function estadoLabel(e) {
+  return { pendiente: '⏳ Pendiente', confirmada: '✅ Confirmada', cancelada: '❌ Cancelada' }[e] || e;
+}
+
+function formatDate(dt) {
+  if (!dt) return '—';
+  return new Date(dt).toLocaleDateString('es-CO', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' });
+}
+
+/* ===== EXPORT CSV ===== */
+function exportarCSV() {
+  if (dataMode !== 'local') {
+    window.location.href = `${API}/api/reservas/exportar/csv`;
+    return;
+  }
+  const rows = getLocalReservas();
+  if (!rows.length) { alert('No hay reservas guardadas para exportar.'); return; }
+
+  const headers = ['ID','Nombre','Teléfono','Correo','Modalidad','Tipo Hab.','Piso','Entrada','Salida','Huéspedes','Mensaje','Estado','Creado'];
+  const escape  = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const csv     = [
+    headers.map(escape).join(','),
+    ...rows.map(r => [
+      r.id, r.nombre, r.telefono, r.correo||'',
+      r.modalidad||'', r.tipo_habitacion||'', r.piso||'',
+      r.fecha_entrada||'', r.fecha_salida||'', r.huespedes||'',
+      r.mensaje||'', r.estado, r.fecha_creacion||''
+    ].map(escape).join(','))
+  ].join('\n');
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `reservas_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ===== DEMO DATA (cuando no hay backend y localStorage está vacío) ===== */
+function loadDemoData() {
+  const demoRows = [
+    { id:1, nombre:'María García', telefono:'+57 300 123 4567', correo:'maria@email.com', modalidad:'cabaña_completa', fecha_entrada:'2025-07-15', fecha_salida:'2025-07-20', huespedes:28, mensaje:'Familia grande, necesitamos espacio', estado:'pendiente', fecha_creacion:'2025-06-01 10:30' },
+    { id:2, nombre:'Carlos Rodríguez', telefono:'+57 315 987 6543', correo:'carlos@gmail.com', modalidad:'habitaciones', fecha_entrada:'2025-08-01', fecha_salida:'2025-08-05', huespedes:8, mensaje:'Grupo de amigos, preferimos piso 2', estado:'confirmada', fecha_creacion:'2025-06-02 14:20' },
+    { id:3, nombre:'Andrés López', telefono:'+57 321 456 7890', correo:null, modalidad:'cotizacion', fecha_entrada:'2025-09-10', fecha_salida:'2025-09-15', huespedes:15, mensaje:'¿Tienen disponibilidad en septiembre?', estado:'pendiente', fecha_creacion:'2025-06-03 09:15' },
+  ];
+  totalRecords = demoRows.length;
+  renderTable(demoRows);
+  updatePagination();
+  document.getElementById('filterCount').textContent = `${demoRows.length} reservas (demo)`;
+  document.getElementById('statTotal').textContent = demoRows.length;
+  document.getElementById('statPendientes').textContent = demoRows.filter(r => r.estado === 'pendiente').length;
+  document.getElementById('statConfirmadas').textContent = demoRows.filter(r => r.estado === 'confirmada').length;
+  document.getElementById('statCanceladas').textContent = demoRows.filter(r => r.estado === 'cancelada').length;
+}
+</script>
+</body>
+</html>

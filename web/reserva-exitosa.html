@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud Enviada | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: var(--off-white); }
+    .success-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+    .success-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      max-width: 560px;
+      width: 100%;
+      overflow: hidden;
+      text-align: center;
+    }
+    .success-card__top {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--ocean) 100%);
+      padding: 48px 40px 40px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .success-card__top::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
+    }
+    .success-icon {
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 20px;
+      border: 3px solid rgba(255,255,255,0.4);
+      position: relative;
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes popIn {
+      0%   { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-card__top h1 {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .success-card__top p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.5;
+      position: relative;
+    }
+    .success-card__body { padding: 40px; }
+    .next-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .next-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--off-white);
+      border-radius: var(--radius-sm);
+    }
+    .next-step__num {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .next-step__text { font-size: 0.875rem; color: var(--dark); line-height: 1.5; }
+    .success-actions { display: flex; flex-direction: column; gap: 10px; }
+    .confetti-emoji {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    .confetti-emoji:nth-child(1) { top: 10px; left: 15%; animation-delay: 0s; }
+    .confetti-emoji:nth-child(2) { top: 20px; right: 15%; animation-delay: 0.5s; }
+    .confetti-emoji:nth-child(3) { top: 60%; left: 8%; animation-delay: 1s; }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-10px) rotate(10deg); }
+    }
+  </style>
+</head>
+<body>
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-card__top">
+      <span class="confetti-emoji">🌴</span>
+      <span class="confetti-emoji">🌊</span>
+      <span class="confetti-emoji">🏖️</span>
+      <div class="success-icon">✅</div>
+      <h1 data-es="¡Solicitud enviada!" data-en="Request sent!">¡Solicitud enviada!</h1>
+      <p data-es="Recibimos tu solicitud de reserva en Cabaña La Gabriela. ¡Pronto estarás frente al mar!" data-en="We received your booking request at Cabaña La Gabriela. You'll be by the sea soon!">
+        Recibimos tu solicitud de reserva en Cabaña La Gabriela. ¡Pronto estarás frente al mar!
+      </p>
+    </div>
+    <div class="success-card__body">
+      <h3 style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; margin-bottom:16px; color:var(--dark);" data-es="¿Qué sigue?" data-en="What's next?">¿Qué sigue?</h3>
+      <div class="next-steps">
+        <div class="next-step">
+          <div class="next-step__num">1</div>
+          <div class="next-step__text" data-es="Tu solicitud se envió por WhatsApp. Revisa que el mensaje haya llegado correctamente." data-en="Your request was sent via WhatsApp. Check that the message was sent correctly.">Tu solicitud se envió por WhatsApp. Revisa que el mensaje haya llegado correctamente.</div>
+        </div>
+        <div class="next-step">
+          <div class="next-step__num">2</div>
+          <div class="next-step__text" data-es="Te responderemos en la mayor brevedad posible con disponibilidad y cotización." data-en="We'll reply as soon as possible with availability and pricing.">Te responderemos con la disponibilidad y cotización a la brevedad.</div>
+        </div>
+        <div class="next-step">
+          <div class="next-step__num">3</div>
+          <div class="next-step__text" data-es="Acordamos los detalles y confirmas con un depósito. ¡Listo para el Caribe!" data-en="We agree on details and you confirm with a deposit. Ready for the Caribbean!">Acordamos los detalles, confirmas con depósito y ¡listo para el Caribe!</div>
+        </div>
+      </div>
+      <div class="success-actions">
+        <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="btn btn-whatsapp btn-full">
+          📱 <span data-es="Escribirnos directamente por WhatsApp" data-en="Message us directly on WhatsApp">Escribirnos directamente por WhatsApp</span>
+        </a>
+        <a href="index.html" class="btn btn-outline-dark btn-full" data-es="Volver al inicio" data-en="Back to home">Volver al inicio</a>
+      </div>
+      <p style="font-size:0.75rem; color:var(--gray); margin-top:20px;" data-es="También puedes seguirnos en Instagram @lagabriela06 y TikTok @la_gabriela06 para ver fotos y videos de la cabaña." data-en="You can also follow us on Instagram @lagabriela06 and TikTok @la_gabriela06 to see photos and videos of the cabin.">
+        Síguenos en <a href="https://instagram.com/lagabriela06" style="color:var(--ocean);">@lagabriela06</a> para ver más de la cabaña.
+      </p>
+    </div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+</body>
+</html>

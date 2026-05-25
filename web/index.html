@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cabaña La Gabriela — Tu paraíso frente al mar en San Bernardo del Viento, Córdoba. Alquiler de cabaña vacacional con capacidad para más de 40 personas. Playa Venado, Caribe colombiano.">
+  <meta name="keywords" content="cabaña, San Bernardo del Viento, Córdoba, Colombia, Playa Venado, vacaciones, playa, alquiler, cabaña familiar">
+  <meta property="og:title" content="Cabaña La Gabriela — Frente al Mar | San Bernardo del Viento">
+  <meta property="og:description" content="Despierta con el sonido del mar. Cabaña vacacional frente al Caribe colombiano para grupos y familias.">
+  <meta property="og:type" content="website">
+  <title>Cabaña La Gabriela | San Bernardo del Viento, Córdoba</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <style>
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero__media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero__video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero__fallback {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: linear-gradient(135deg, #1A1A2E 0%, #1D6FA6 60%, #2A9D8F 100%);
+    }
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.25) 0%,
+        rgba(0,0,0,0.50) 50%,
+        rgba(0,0,0,0.70) 100%
+      );
+    }
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: white;
+      padding: 0 24px;
+      max-width: 860px;
+    }
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #F9E4B7;
+      margin-bottom: 24px;
+      animation: fadeDown 0.8s ease forwards;
+    }
+    .hero__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.08;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      animation: fadeUp 0.9s 0.1s ease both;
+    }
+    .hero__title .script {
+      font-family: 'Dancing Script', cursive;
+      color: #F4A261;
+      display: block;
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .hero__subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 40px;
+      line-height: 1.6;
+      animation: fadeUp 0.9s 0.25s ease both;
+    }
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.9s 0.4s ease both;
+    }
+    .hero__scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fadeIn 1.2s 0.8s ease both;
+    }
+    .hero__scroll-dot {
+      width: 2px;
+      height: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+      animation: scrollLine 1.8s infinite;
+    }
+    .hero__stats {
+      position: absolute;
+      bottom: 80px;
+      left: 0; right: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    .hero__stat {
+      padding: 16px 40px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+    .hero__stat:last-child { border-right: none; }
+    .hero__stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      line-height: 1;
+      display: block;
+    }
+    .hero__stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(24px);  } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scrollLine { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.5); } }
+
+    /* ===== ABOUT STRIP ===== */
+    .about-strip {
+      background: var(--off-white);
+      padding: 56px 0;
+      border-bottom: 1px solid var(--sand-dark);
+    }
+    .about-strip__inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .about-strip__text {}
+    .about-strip__divider {
+      width: 1px;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--sand-dark), transparent);
+    }
+    .about-strip__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .about-strip__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .about-strip__desc {
+      color: var(--gray);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .about-strip__amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ===== HIGHLIGHTS ===== */
+    .highlights {
+      background: var(--white);
+    }
+    .highlight-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+      height: 100%;
+    }
+    .highlight-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+    .highlight-card__image {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+    .highlight-card__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .highlight-card:hover .highlight-card__image img { transform: scale(1.08); }
+    .highlight-card__icon {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--accent) 100%);
+    }
+    .highlight-card__content { padding: 24px; }
+    .highlight-card__tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--secondary-dark);
+      margin-bottom: 8px;
+    }
+    .highlight-card__title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .highlight-card__text {
+      font-size: 0.875rem;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+
+    /* ===== ROOMS PREVIEW ===== */
+    .rooms-preview {
+      background: var(--dark);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .rooms-preview::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 100%, rgba(244,162,97,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(42,157,143,0.15) 0%, transparent 50%);
+    }
+    .rooms-preview .container { position: relative; z-index: 1; }
+    .rooms-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .rooms-tab {
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      border: 2px solid rgba(255,255,255,0.15);
+      transition: all 0.25s;
+      cursor: pointer;
+      background: transparent;
+      font-family: inherit;
+    }
+    .rooms-tab.active, .rooms-tab:hover {
+      color: var(--dark);
+      background: var(--sand);
+      border-color: var(--sand);
+    }
+    .rooms-panel { display: none; }
+    .rooms-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+    .rooms-panel__image {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 420px;
+      position: relative;
+    }
+    .rooms-panel__image img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .rooms-panel__image-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+    }
+    .rooms-panel__content {}
+    .rooms-panel__floor {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(255,183,3,0.2);
+      color: var(--sun);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .rooms-panel__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .rooms-panel__desc {
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+    .rooms-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .rooms-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .rooms-feature span:first-child {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .rooms-capacity {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .rooms-capacity__item {
+      text-align: center;
+      padding: 16px 24px;
+      background: rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.1);
+      flex: 1;
+    }
+    .rooms-capacity__num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--sun);
+      display: block;
+      line-height: 1;
+    }
+    .rooms-capacity__label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 6px;
+    }
+
+    /* ===== SEA CTA ===== */
+    .sea-cta {
+      position: relative;
+      padding: 120px 0;
+      background: linear-gradient(135deg, var(--ocean-dark) 0%, var(--accent-dark) 100%);
+      overflow: hidden;
+      text-align: center;
+      color: white;
+    }
+    .sea-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,0.08)'/%3E%3C/svg%3E");
+    }
+    .sea-cta__content { position: relative; z-index: 1; }
+    .sea-cta__icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+    .sea-cta__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .sea-cta__subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .sea-cta__actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== LOCATIONS TEASER ===== */
+    .location-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .location-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      height: 280px;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+    }
+    .location-card__bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      transition: transform 0.5s ease;
+    }
+    .location-card:hover .location-card__bg { transform: scale(1.05); }
+    .location-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+    }
+    .location-card__content {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      padding: 24px;
+      color: white;
+    }
+    .location-card__label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 6px;
+    }
+    .location-card__name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .location-card__dist {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+      margin-top: 4px;
+    }
+    .location-card__arrow {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: all 0.3s;
+    }
+    .location-card:hover .location-card__arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--ocean));
+      z-index: 0;
+    }
+    .step {
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .step__num {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 20px;
+      border: 4px solid white;
+      box-shadow: var(--shadow-md);
+      font-weight: 700;
+    }
+    .step:nth-child(1) .step__num { background: var(--primary); color: white; }
+    .step:nth-child(2) .step__num { background: var(--secondary); color: white; }
+    .step:nth-child(3) .step__num { background: var(--accent); color: white; }
+    .step:nth-child(4) .step__num { background: var(--ocean); color: white; }
+    .step__icon { font-size: 2rem; margin-bottom: 4px; }
+    .step__title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .step__text {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ===== INSTAGRAM TEASER ===== */
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .instagram-tile {
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .instagram-tile__bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      transition: transform 0.4s;
+    }
+    .instagram-tile:hover .instagram-tile__bg { transform: scale(1.08); }
+    .instagram-tile__overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s;
+      color: white; font-size: 1.5rem;
+    }
+    .instagram-tile:hover .instagram-tile__overlay { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hero__stats { display: none; }
+      .about-strip__inner { grid-template-columns: 1fr; }
+      .about-strip__divider { display: none; }
+      .rooms-panel.active { grid-template-columns: 1fr; }
+      .rooms-panel__image { height: 260px; }
+      .steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .steps::before { display: none; }
+      .location-cards { grid-template-columns: 1fr; }
+      .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .hero__title { font-size: 2.5rem; }
+      .hero__actions { flex-direction: column; align-items: center; }
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  NAVBAR                                                      -->
+<!-- ============================================================ -->
+<nav class="navbar transparent" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+
+    <div class="navbar__links">
+      <a href="index.html"       class="navbar__link" data-es="Inicio"       data-en="Home">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link" data-es="Habitaciones" data-en="Rooms">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link" data-es="Galería"      data-en="Gallery">Galería</a>
+      <a href="lugares.html"      class="navbar__link" data-es="Lugares"      data-en="Places">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link" data-es="Cómo Llegar"  data-en="How to Arrive">Cómo Llegar</a>
+    </div>
+
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta" data-es="Reservar" data-en="Book Now">Reservar</a>
+    </div>
+
+    <button class="navbar__hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px; align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!--  HERO                                                        -->
+<!-- ============================================================ -->
+<section class="hero">
+  <div class="hero__media">
+    <!-- Video drone — reemplaza src con URL de tu video en nube (YouTube embed, Cloudinary, etc.) -->
+    <video
+      class="hero__video"
+      autoplay muted loop playsinline
+      poster="img/Hero.jpg"
+      data-src=""
+    >
+      <!-- <source src="TU_URL_VIDEO_DRONE.mp4" type="video/mp4"> -->
+    </video>
+    <!-- Foto de portada real — Cabaña La Gabriela -->
+    <img
+      src="img/Hero.jpg"
+      alt="Cabaña La Gabriela — Vista frontal desde la playa. Playa Venado, San Bernardo del Viento"
+      class="hero__fallback"
+      style="object-position: center 60%;"
+    >
+  </div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content">
+    <div class="hero__eyebrow">
+      <span>📍</span>
+      <span data-es="San Bernardo del Viento · Playa Venado · Córdoba" data-en="San Bernardo del Viento · Venado Beach · Colombia">
+        San Bernardo del Viento · Playa Venado · Córdoba
+      </span>
+    </div>
+
+    <h1 class="hero__title">
+      <span class="script">Despierta con el</span>
+      <span data-es="sonido del mar" data-en="sound of the sea">sonido del mar</span>
+    </h1>
+
+    <p class="hero__subtitle" data-es="Tu cabaña familiar frente al Caribe colombiano. Playa, brisa, colores y memorias que duran para siempre." data-en="Your family cabin facing the Colombian Caribbean. Beach, breeze, colors, and memories that last forever.">
+      Tu cabaña familiar frente al Caribe colombiano. Playa, brisa, colores y memorias que duran para siempre.
+    </p>
+
+    <div class="hero__actions">
+      <a href="reservas.html" class="btn btn-primary btn-lg" data-es="Reservar Ahora" data-en="Book Now">
+        🏖️ Reservar Ahora
+      </a>
+      <a href="galeria.html" class="btn btn-outline btn-lg" data-es="Ver Galería" data-en="View Gallery">
+        📷 Ver Galería
+      </a>
+    </div>
+  </div>
+
+  <div class="hero__stats">
+    <div class="hero__stat">
+      <span class="hero__stat-num" data-count="40" data-suffix="+">40+</span>
+      <span class="hero__stat-label" data-es="Personas" data-en="Guests">Personas</span>
+    </div>
+    <div class="hero__stat">
+      <span class="hero__stat-num" data-count="7">7</span>
+      <span class="hero__stat-label" data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+    </div>
+    <div class="hero__stat">
+      <span class="hero__stat-num" data-count="3">3</span>
+      <span class="hero__stat-label" data-es="Pisos" data-en="Floors">Pisos</span>
+    </div>
+    <div class="hero__stat">
+      <span class="hero__stat-num">0 m</span>
+      <span class="hero__stat-label" data-es="Del Mar" data-en="From Sea">Del Mar</span>
+    </div>
+  </div>
+
+  <div class="hero__scroll">
+    <div class="hero__scroll-dot"></div>
+    <span data-es="Explorar" data-en="Explore">Explorar</span>
+  </div>
+</section>
+
+<!-- Color strip -->
+<div class="color-strip"></div>
+
+<!-- ============================================================ -->
+<!--  ABOUT STRIP                                                 -->
+<!-- ============================================================ -->
+<section class="about-strip">
+  <div class="container">
+    <div class="about-strip__inner">
+      <div class="about-strip__text fade-in">
+        <div class="about-strip__badge">🌴 Cabaña La Gabriela</div>
+        <h2 class="about-strip__title" data-es="Directamente frente al mar Caribe" data-en="Directly facing the Caribbean Sea">
+          Directamente frente al mar Caribe
+        </h2>
+        <p class="about-strip__desc" data-es="Una cabaña de 3 pisos inspirada en la arquitectura antioqueña, llena de color, sabor y la energía del Caribe. Ideal para reuniones familiares, grupos de amigos y escapadas especiales en San Bernardo del Viento, Córdoba." data-en="A 3-story cabin inspired by Antioquian architecture, full of color, flavor, and Caribbean energy. Perfect for family gatherings, friend groups, and special getaways in San Bernardo del Viento, Córdoba.">
+          Una cabaña de 3 pisos inspirada en la arquitectura antioqueña, llena de color, sabor y la energía del Caribe. Ideal para reuniones familiares, grupos de amigos y escapadas especiales en San Bernardo del Viento, Córdoba.
+        </p>
+      </div>
+
+      <div class="about-strip__divider"></div>
+
+      <div class="fade-in">
+        <p class="text-sm text-gray mb-16" data-es="Servicios disponibles:" data-en="Available amenities:">Servicios disponibles:</p>
+        <div class="about-strip__amenities">
+          <span class="amenity-item">🌊 <span data-es="Frente al mar" data-en="Beachfront">Frente al mar</span></span>
+          <span class="amenity-item">❄️ <span data-es="Aire acondicionado" data-en="Air conditioning">Aire acondicionado</span></span>
+          <span class="amenity-item">🍳 <span data-es="Cocina equipada" data-en="Equipped kitchen">Cocina equipada</span></span>
+          <span class="amenity-item">🚗 <span data-es="Parqueadero" data-en="Parking">Parqueadero</span></span>
+          <span class="amenity-item">☀️ <span data-es="Asoleadero" data-en="Sun deck">Asoleadero</span></span>
+          <span class="amenity-item">📺 <span data-es="Televisión" data-en="TV">Televisión</span></span>
+          <span class="amenity-item">👨‍🍳 <span data-es="Chef disponible" data-en="Chef available">Chef disponible</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  HIGHLIGHTS                                                  -->
+<!-- ============================================================ -->
+<section class="section highlights">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="eyebrow" data-es="¿Por qué elegir La Gabriela?" data-en="Why choose La Gabriela?">¿Por qué elegir La Gabriela?</span>
+      <h2 data-es="Una experiencia única frente al Caribe" data-en="A unique experience facing the Caribbean">Una experiencia única frente al Caribe</h2>
+      <p data-es="Todo lo que necesitas para una estadía perfecta, a pocos pasos del agua." data-en="Everything you need for a perfect stay, steps from the water.">
+        Todo lo que necesitas para una estadía perfecta, a pocos pasos del agua.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="highlight-card fade-in">
+        <div class="highlight-card__image">
+          <img src="img/DJI_0628.jpg" alt="Vista aérea de Cabaña La Gabriela frente al mar Caribe">
+        </div>
+        <div class="highlight-card__content">
+          <span class="highlight-card__tag" data-es="Ubicación privilegiada" data-en="Prime location">Ubicación privilegiada</span>
+          <h3 class="highlight-card__title" data-es="Directamente en la playa" data-en="Right on the beach">Directamente en la playa</h3>
+          <p class="highlight-card__text" data-es="Abre la puerta y pisa la arena. Playa Venado está literalmente a tus pies. Disfruta el amanecer caribeño con el café en mano." data-en="Open the door and step onto the sand. Playa Venado is literally at your feet. Enjoy the Caribbean sunrise with coffee in hand.">
+            Abre la puerta y pisa la arena. Playa Venado está literalmente a tus pies. Disfruta el amanecer caribeño con el café en mano.
+          </p>
+        </div>
+      </div>
+
+      <div class="highlight-card fade-in">
+        <div class="highlight-card__image">
+          <img src="img/Hero.jpg" alt="Fachada colorida de Cabaña La Gabriela — arquitectura antioqueña">
+        </div>
+        <div class="highlight-card__content">
+          <span class="highlight-card__tag" data-es="Arquitectura antioqueña" data-en="Antioquian architecture">Arquitectura antioqueña</span>
+          <h3 class="highlight-card__title" data-es="Colorida y familiar" data-en="Colorful and family-friendly">Colorida y familiar</h3>
+          <p class="highlight-card__text" data-es="Inspirada en las casas antioqueñas: colores vibrantes, corredores acogedores y espacios amplios para compartir en familia." data-en="Inspired by Antioquian houses: vibrant colors, welcoming hallways, and spacious areas for family gatherings.">
+            Inspirada en las casas antioqueñas: colores vibrantes, corredores acogedores y espacios amplios para compartir en familia.
+          </p>
+        </div>
+      </div>
+
+      <div class="highlight-card fade-in">
+        <div class="highlight-card__image">
+          <img src="img/DJI_0621.jpg" alt="Vista aérea completa de Cabaña La Gabriela — capacidad para más de 40 personas">
+        </div>
+        <div class="highlight-card__content">
+          <span class="highlight-card__tag" data-es="Capacidad grande" data-en="Large capacity">Capacidad grande</span>
+          <h3 class="highlight-card__title" data-es="Más de 40 personas" data-en="More than 40 people">Más de 40 personas</h3>
+          <p class="highlight-card__text" data-es="7 habitaciones distribuidas en 2 pisos principales con capacidad base de 28 personas y opciones de ampliar a más de 40 con colchonetas." data-en="7 rooms on 2 main floors with a base capacity of 28 people, expandable to 40+ with air mattresses.">
+            7 habitaciones distribuidas en 2 pisos principales con capacidad base de 28 personas y opciones de ampliar a más de 40 con colchonetas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  ROOMS PREVIEW                                               -->
+<!-- ============================================================ -->
+<section class="section rooms-preview">
+  <div class="container">
+    <div class="section-header fade-in" style="color:white;">
+      <span class="eyebrow" style="color: var(--sand);" data-es="Nuestros espacios" data-en="Our spaces">Nuestros espacios</span>
+      <h2 style="color:white;" data-es="Habitaciones para cada grupo" data-en="Rooms for every group">Habitaciones para cada grupo</h2>
+      <p style="color:rgba(255,255,255,0.6);" data-es="Desde el primer piso con vista al jardín hasta el segundo con vista al mar." data-en="From the first floor with garden views to the second floor with sea views.">
+        Desde el primer piso con vista al jardín hasta el segundo con vista al mar.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="rooms-tabs">
+      <button class="rooms-tab active" onclick="showRoomsPanel(0, this)" data-es="Primer Piso" data-en="First Floor">🏠 Primer Piso</button>
+      <button class="rooms-tab" onclick="showRoomsPanel(1, this)" data-es="Segundo Piso" data-en="Second Floor">🌊 Segundo Piso</button>
+      <button class="rooms-tab" onclick="showRoomsPanel(2, this)" data-es="Tercer Piso" data-en="Third Floor">☀️ Tercer Piso</button>
+    </div>
+
+    <!-- Panel 1 -->
+    <div class="rooms-panel active" id="rp0">
+      <div class="rooms-panel__image">
+        <img src="img/DSC_0029.jpg" alt="Primer piso — habitación con camarote y cama doble" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">
+      </div>
+      <div class="rooms-panel__content">
+        <span class="rooms-panel__floor" data-es="Primer Piso · 3 Habitaciones" data-en="First Floor · 3 Rooms">Primer Piso · 3 Habitaciones</span>
+        <h3 class="rooms-panel__title" data-es="Cómodas y frescas" data-en="Comfortable and cool">Cómodas y frescas</h3>
+        <p class="rooms-panel__desc" data-es="Las 3 habitaciones del primer piso son perfectas para adultos mayores o quien prefiera evitar escaleras. Acceso directo al área social y la cocina." data-en="The 3 rooms on the first floor are perfect for seniors or those who prefer to avoid stairs. Direct access to the social area and kitchen.">
+          Las 3 habitaciones del primer piso son perfectas para adultos mayores o quien prefiera evitar escaleras. Acceso directo al área social y la cocina.
+        </p>
+        <div class="rooms-capacity">
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">3</span>
+            <span class="rooms-capacity__label" data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">12</span>
+            <span class="rooms-capacity__label" data-es="Personas base" data-en="Base capacity">Personas base</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">2+1</span>
+            <span class="rooms-capacity__label" data-es="Baños" data-en="Bathrooms">Baños</span>
+          </div>
+        </div>
+        <div class="rooms-features">
+          <div class="rooms-feature"><span>🛏️</span> <span data-es="Cama doble + camarote por habitación" data-en="Double bed + bunk bed per room">Cama doble + camarote por habitación</span></div>
+          <div class="rooms-feature"><span>❄️</span> <span data-es="Aire acondicionado incluido" data-en="Air conditioning included">Aire acondicionado incluido</span></div>
+          <div class="rooms-feature"><span>🚿</span> <span data-es="2 baños sociales + 1 con ducha" data-en="2 social bathrooms + 1 with shower">2 baños sociales + 1 con ducha</span></div>
+        </div>
+        <a href="habitaciones.html" class="btn btn-secondary" data-es="Ver detalles completos" data-en="View full details">Ver detalles completos →</a>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="rooms-panel" id="rp1">
+      <div class="rooms-panel__image">
+        <img src="img/DSC_0052.jpg" alt="Segundo piso — cama doble vista al mar" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">
+      </div>
+      <div class="rooms-panel__content">
+        <span class="rooms-panel__floor" data-es="Segundo Piso · 4 Habitaciones" data-en="Second Floor · 4 Rooms">Segundo Piso · 4 Habitaciones</span>
+        <h3 class="rooms-panel__title" data-es="Vista y brisa del Caribe" data-en="Caribbean view and breeze">Vista y brisa del Caribe</h3>
+        <p class="rooms-panel__desc" data-es="Las 4 habitaciones del segundo piso ofrecen mejor ventilación y vistas. Dos de ellas tienen baño privado, ideal para parejas o familias que buscan más privacidad." data-en="The 4 rooms on the second floor offer better ventilation and views. Two have private bathrooms, ideal for couples or families seeking more privacy.">
+          Las 4 habitaciones del segundo piso ofrecen mejor ventilación y vistas. Dos de ellas tienen baño privado, ideal para parejas o familias que buscan más privacidad.
+        </p>
+        <div class="rooms-capacity">
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">4</span>
+            <span class="rooms-capacity__label" data-es="Habitaciones" data-en="Rooms">Habitaciones</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">16</span>
+            <span class="rooms-capacity__label" data-es="Personas base" data-en="Base capacity">Personas base</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">2+1</span>
+            <span class="rooms-capacity__label" data-es="Baños" data-en="Bathrooms">Bathrooms</span>
+          </div>
+        </div>
+        <div class="rooms-features">
+          <div class="rooms-feature"><span>🛏️</span> <span data-es="Cama doble + camarote (+ opción colchoneta)" data-en="Double bed + bunk bed (+ mattress option)">Cama doble + camarote (+ opción colchoneta)</span></div>
+          <div class="rooms-feature"><span>🚿</span> <span data-es="2 habitaciones con baño privado" data-en="2 rooms with private bathroom">2 habitaciones con baño privado</span></div>
+          <div class="rooms-feature"><span>🌊</span> <span data-es="Vista al mar desde los corredores" data-en="Sea view from the corridors">Vista al mar desde los corredores</span></div>
+        </div>
+        <a href="habitaciones.html" class="btn btn-secondary" data-es="Ver detalles completos" data-en="View full details">Ver detalles completos →</a>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="rooms-panel" id="rp2">
+      <div class="rooms-panel__image">
+        <img src="img/Asoleadero.jpg" alt="Tercer piso — asoleadero con vista panorámica al Caribe" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-lg);">
+      </div>
+      <div class="rooms-panel__content">
+        <span class="rooms-panel__floor" data-es="Tercer Piso · Espacio Abierto" data-en="Third Floor · Open Space">Tercer Piso · Espacio Abierto</span>
+        <h3 class="rooms-panel__title" data-es="Tu rincón bajo las estrellas" data-en="Your corner under the stars">Tu rincón bajo las estrellas</h3>
+        <p class="rooms-panel__desc" data-es="El tercer piso es un espacio abierto con vista panorámica al Caribe. Puede acomodar hasta 8 colchonetas adicionales para grupos muy grandes. No está dotado como habitación formal." data-en="The third floor is an open space with panoramic Caribbean views. Can accommodate up to 8 additional air mattresses for large groups. Not set up as a formal room.">
+          El tercer piso es un espacio abierto con vista panorámica al Caribe. Puede acomodar hasta 8 colchonetas adicionales para grupos muy grandes. No está dotado como habitación formal.
+        </p>
+        <div class="rooms-capacity">
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">8</span>
+            <span class="rooms-capacity__label" data-es="Colchonetas" data-en="Mattresses">Colchonetas</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">360°</span>
+            <span class="rooms-capacity__label" data-es="Vista al mar" data-en="Sea view">Vista al mar</span>
+          </div>
+          <div class="rooms-capacity__item">
+            <span class="rooms-capacity__num">★</span>
+            <span class="rooms-capacity__label" data-es="Estrellas" data-en="Stars">Estrellas</span>
+          </div>
+        </div>
+        <div class="rooms-features">
+          <div class="rooms-feature"><span>🌅</span> <span data-es="Vista panorámica 360° al Caribe" data-en="360° panoramic Caribbean view">Vista panorámica 360° al Caribe</span></div>
+          <div class="rooms-feature"><span>💨</span> <span data-es="Brisa natural del mar" data-en="Natural sea breeze">Brisa natural del mar</span></div>
+          <div class="rooms-feature"><span>📋</span> <span data-es="Consultar disponibilidad" data-en="Check availability">Consultar disponibilidad</span></div>
+        </div>
+        <a href="reservas.html" class="btn btn-secondary" data-es="Consultar por WhatsApp" data-en="Inquire on WhatsApp">Consultar por WhatsApp →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  SEA CTA                                                     -->
+<!-- ============================================================ -->
+<section class="sea-cta">
+  <div class="container">
+    <div class="sea-cta__content fade-in">
+      <span class="sea-cta__icon">🌊</span>
+      <h2 class="sea-cta__title" data-es="¿Listo para despertar con el mar?" data-en="Ready to wake up to the sea?">
+        ¿Listo para despertar con el mar?
+      </h2>
+      <p class="sea-cta__subtitle" data-es="Escríbenos por WhatsApp y te cotizamos en minutos. Sin complicaciones, sin intermediarios." data-en="Message us on WhatsApp and we'll quote you in minutes. No complications, no middlemen.">
+        Escríbenos por WhatsApp y te cotizamos en minutos. Sin complicaciones, sin intermediarios.
+      </p>
+      <div class="sea-cta__actions">
+        <a href="reservas.html" class="btn btn-primary btn-lg" data-es="Hacer una Reserva" data-en="Make a Reservation">🏖️ Hacer una Reserva</a>
+        <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4"
+           target="_blank" rel="noopener"
+           class="btn btn-whatsapp btn-lg">
+          📱 WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  LUGARES CERCANOS (teaser)                                   -->
+<!-- ============================================================ -->
+<section class="section" style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="eyebrow" data-es="Explora los alrededores" data-en="Explore the surroundings">Explora los alrededores</span>
+      <h2 data-es="Playas y destinos cercanos" data-en="Nearby beaches and destinations">Playas y destinos cercanos</h2>
+      <p data-es="San Bernardo del Viento es un paraíso de playas vírgenes, manglares y cultura caribeña auténtica." data-en="San Bernardo del Viento is a paradise of pristine beaches, mangroves, and authentic Caribbean culture.">
+        San Bernardo del Viento es un paraíso de playas vírgenes, manglares y cultura caribeña auténtica.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="location-cards stagger">
+      <a href="lugares.html" class="location-card fade-in">
+        <div class="location-card__bg" style="background: linear-gradient(135deg, #1D6FA6, #48CAE4);">🏖️</div>
+        <div class="location-card__overlay"></div>
+        <div class="location-card__content">
+          <div class="location-card__label" data-es="Playa" data-en="Beach">Playa</div>
+          <div class="location-card__name" data-es="Playa Venado" data-en="Playa Venado">Playa Venado</div>
+          <div class="location-card__dist" data-es="A metros de la cabaña" data-en="Steps from the cabin">A metros de la cabaña</div>
+        </div>
+        <div class="location-card__arrow">→</div>
+      </a>
+
+      <a href="lugares.html" class="location-card fade-in">
+        <div class="location-card__bg" style="background: linear-gradient(135deg, #2A9D8F, #2D6A4F);">🌿</div>
+        <div class="location-card__overlay"></div>
+        <div class="location-card__content">
+          <div class="location-card__label" data-es="Municipio" data-en="Municipality">Municipio</div>
+          <div class="location-card__name" data-es="San Bernardo del Viento" data-en="San Bernardo del Viento">San Bernardo del Viento</div>
+          <div class="location-card__dist" data-es="Muy cerca" data-en="Very close">Muy cerca</div>
+        </div>
+        <div class="location-card__arrow">→</div>
+      </a>
+
+      <a href="lugares.html" class="location-card fade-in">
+        <div class="location-card__bg" style="background: linear-gradient(135deg, #E63946, #F4A261);">🌅</div>
+        <div class="location-card__overlay"></div>
+        <div class="location-card__content">
+          <div class="location-card__label" data-es="Playa" data-en="Beach">Playa</div>
+          <div class="location-card__name" data-es="Playa del Viento" data-en="Playa del Viento">Playa del Viento</div>
+          <div class="location-card__dist" data-es="Zona de San Bernardo" data-en="San Bernardo area">Zona de San Bernardo</div>
+        </div>
+        <div class="location-card__arrow">→</div>
+      </a>
+    </div>
+
+    <div class="text-center mt-32">
+      <a href="lugares.html" class="btn btn-outline-dark btn-lg" data-es="Ver todos los lugares" data-en="See all places">Ver todos los lugares →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  CÓMO FUNCIONA                                               -->
+<!-- ============================================================ -->
+<section class="section" style="background: var(--white);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="eyebrow" data-es="Proceso simple" data-en="Simple process">Proceso simple</span>
+      <h2 data-es="Reservar es muy fácil" data-en="Booking is very easy">Reservar es muy fácil</h2>
+      <p data-es="Sin formularios complicados. Solo escríbenos y lo arreglamos." data-en="No complicated forms. Just message us and we'll sort it out.">
+        Sin formularios complicados. Solo escríbenos y lo arreglamos.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="steps stagger">
+      <div class="step fade-in">
+        <div class="step__num">1</div>
+        <div class="step__icon">📋</div>
+        <h4 class="step__title" data-es="Llena el formulario" data-en="Fill the form">Llena el formulario</h4>
+        <p class="step__text" data-es="Cuéntanos tus fechas, cantidad de personas y preferencias de habitación." data-en="Tell us your dates, number of guests, and room preferences.">
+          Cuéntanos tus fechas, cantidad de personas y preferencias de habitación.
+        </p>
+      </div>
+      <div class="step fade-in">
+        <div class="step__num">2</div>
+        <div class="step__icon">📱</div>
+        <h4 class="step__title" data-es="Te contactamos" data-en="We contact you">Te contactamos</h4>
+        <p class="step__text" data-es="Te respondemos por WhatsApp con la disponibilidad y cotización en minutos." data-en="We reply via WhatsApp with availability and a quote in minutes.">
+          Te respondemos por WhatsApp con la disponibilidad y cotización en minutos.
+        </p>
+      </div>
+      <div class="step fade-in">
+        <div class="step__num">3</div>
+        <div class="step__icon">✅</div>
+        <h4 class="step__title" data-es="Confirmas la reserva" data-en="You confirm">Confirmas la reserva</h4>
+        <p class="step__text" data-es="Acordamos los detalles y confirmas con un depósito. ¡Listo!" data-en="We agree on details and you confirm with a deposit. Done!">
+          Acordamos los detalles y confirmas con un depósito. ¡Listo!
+        </p>
+      </div>
+      <div class="step fade-in">
+        <div class="step__num">4</div>
+        <div class="step__icon">🌊</div>
+        <h4 class="step__title" data-es="Disfruta el Caribe" data-en="Enjoy the Caribbean">Disfruta el Caribe</h4>
+        <p class="step__text" data-es="Llega a la cabaña y despierta con el sonido del mar. Así de simple." data-en="Arrive at the cabin and wake up to the sound of the sea. That simple.">
+          Llega a la cabaña y despierta con el sonido del mar. Así de simple.
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center mt-48">
+      <a href="reservas.html" class="btn btn-primary btn-xl">
+        <span data-es="Comenzar mi reserva" data-en="Start my booking">Comenzar mi reserva</span> →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  INSTAGRAM TEASER                                           -->
+<!-- ============================================================ -->
+<section class="section-sm" style="background: var(--dark);">
+  <div class="container">
+    <div class="flex-between mb-24">
+      <div>
+        <h3 class="heading-sm text-white" data-es="Síguenos en Instagram" data-en="Follow us on Instagram">Síguenos en Instagram</h3>
+        <p class="text-sm" style="color:rgba(255,255,255,0.5);">@lagabriela06</p>
+      </div>
+      <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener"
+         class="btn btn-outline" style="font-size:0.85rem; padding:10px 20px;">
+        <span data-es="Ver perfil" data-en="View profile">Ver perfil</span> ↗
+      </a>
+    </div>
+    <div class="instagram-grid">
+      <div class="instagram-tile">
+        <div class="instagram-tile__bg"><img src="img/DJI_0628.jpg" alt="Vista aérea cabaña" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="instagram-tile__overlay">📸</div>
+      </div>
+      <div class="instagram-tile">
+        <div class="instagram-tile__bg"><img src="img/DSC_0029.jpg" alt="Habitaciones camarote" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="instagram-tile__overlay">📸</div>
+      </div>
+      <div class="instagram-tile">
+        <div class="instagram-tile__bg"><img src="img/DSC_0025.jpg" alt="Comedor vista al mar" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="instagram-tile__overlay">📸</div>
+      </div>
+      <div class="instagram-tile">
+        <div class="instagram-tile__bg"><img src="img/Asoleadero.jpg" alt="Asoleadero terraza" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="instagram-tile__overlay">📸</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  FOOTER                                                      -->
+<!-- ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p data-es="Tu cabaña tropical frente al Caribe en San Bernardo del Viento, Córdoba. Alquiler vacacional para familias y grupos grandes." data-en="Your tropical cabin facing the Caribbean in San Bernardo del Viento, Córdoba. Vacation rental for families and large groups.">
+          Tu cabaña tropical frente al Caribe en San Bernardo del Viento, Córdoba. Alquiler vacacional para familias y grupos grandes.
+        </p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link" title="WhatsApp">📱</a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link" title="Instagram">📷</a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link" title="TikTok">🎵</a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link" title="Facebook">👍</a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4 data-es="Navegación" data-en="Navigation">Navegación</h4>
+        <ul>
+          <li><a href="index.html" data-es="Inicio" data-en="Home">Inicio</a></li>
+          <li><a href="habitaciones.html" data-es="Habitaciones" data-en="Rooms">Habitaciones</a></li>
+          <li><a href="galeria.html" data-es="Galería" data-en="Gallery">Galería</a></li>
+          <li><a href="lugares.html" data-es="Lugares cercanos" data-en="Nearby places">Lugares cercanos</a></li>
+          <li><a href="como-llegar.html" data-es="Cómo llegar" data-en="How to arrive">Cómo llegar</a></li>
+          <li><a href="reservas.html" data-es="Reservar" data-en="Book">Reservar</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 data-es="Destino" data-en="Destination">Destino</h4>
+        <ul>
+          <li><a href="lugares.html" data-es="Playa Venado" data-en="Playa Venado">Playa Venado</a></li>
+          <li><a href="lugares.html" data-es="Playa del Viento" data-en="Playa del Viento">Playa del Viento</a></li>
+          <li><a href="como-llegar.html" data-es="Desde Montería" data-en="From Montería">Desde Montería</a></li>
+          <li><a href="como-llegar.html" data-es="Desde Medellín" data-en="From Medellín">Desde Medellín</a></li>
+          <li><a href="como-llegar.html" data-es="Aeropuertos cercanos" data-en="Nearby airports">Aeropuertos cercanos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 data-es="Contacto" data-en="Contact">Contacto</h4>
+        <div class="footer__contact-item">
+          <span>📍</span>
+          <span data-es="Playa Venado, entre Moñitos y San Bernardo del Viento, Córdoba, Colombia" data-en="Playa Venado, between Moñitos and San Bernardo del Viento, Córdoba, Colombia">
+            Playa Venado, entre Moñitos y San Bernardo del Viento, Córdoba
+          </span>
+        </div>
+        <div class="footer__contact-item">
+          <span>📱</span>
+          <a href="https://wa.me/573137549732">+57 313 754 9732</a>
+        </div>
+        <div class="footer__contact-item">
+          <span>📷</span>
+          <a href="https://instagram.com/lagabriela06">@lagabriela06</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p data-es="© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia" data-en="© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia">
+        © 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia
+      </p>
+      <p>
+        <a href="admin.html" style="color:rgba(255,255,255,0.2); font-size:0.75rem;">Admin</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================ -->
+<!--  WHATSAPP FLOTANTE                                           -->
+<!-- ============================================================ -->
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble" data-es="¡Escríbenos!" data-en="Chat with us!">¡Escríbenos!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4"
+     target="_blank" rel="noopener"
+     class="whatsapp-float__btn"
+     aria-label="Escribir por WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+</div>
+
+<!-- Scroll to top -->
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+
+<script src="js/main.js"></script>
+<script>
+function showRoomsPanel(idx, btn) {
+  document.querySelectorAll('.rooms-panel').forEach((p,i) => p.classList.toggle('active', i === idx));
+  document.querySelectorAll('.rooms-tab').forEach((b,i) => b.classList.toggle('active', i === idx));
+}
+</script>
+</body>
+</html>

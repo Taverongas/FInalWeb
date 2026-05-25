@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lugares y playas cercanas a Cabaña La Gabriela. Playa Venado, Playa del Viento, San Bernardo del Viento y más destinos en Córdoba, Colombia.">
+  <title>Lugares Cercanos | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .place-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s;
+    }
+    .place-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .place-card__media {
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .place-card__media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+      transition: transform 0.5s ease;
+    }
+    .place-card:hover .place-card__media img { transform: scale(1.08); }
+    .place-card__category {
+      position: absolute;
+      top: 16px; left: 16px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .place-card__distance {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .place-card__content { padding: 28px; }
+    .place-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .place-card__desc {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .place-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .place-tag {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--off-white);
+      color: var(--gray);
+      border: 1px solid var(--gray-border);
+    }
+
+    .featured-place {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 48px;
+    }
+    .featured-place__media {
+      height: 100%;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      position: relative;
+    }
+    .featured-place__badge {
+      position: absolute;
+      top: 20px; left: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .featured-place__content {
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .featured-place__eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .featured-place__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .featured-place__desc {
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .featured-place__highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .featured-highlight {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--dark);
+    }
+    .featured-highlight span:first-child { font-size: 1.1rem; }
+
+    .region-info {
+      background: linear-gradient(135deg, var(--dark), var(--ocean-dark));
+      color: white;
+      border-radius: var(--radius-xl);
+      padding: 56px;
+      margin-top: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .region-info::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 0%, rgba(42,157,143,0.2) 0%, transparent 50%);
+    }
+    .region-info__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      position: relative;
+      align-items: center;
+    }
+    .region-info__facts {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .region-fact {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .region-fact__icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .region-fact__title { font-weight: 600; color: white; margin-bottom: 2px; font-size: 0.9rem; }
+    .region-fact__text  { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+
+    @media (max-width: 768px) {
+      .featured-place { grid-template-columns: 1fr; }
+      .featured-place__media { min-height: 240px; }
+      .featured-place__content { padding: 32px 24px; }
+      .featured-place__highlights { grid-template-columns: 1fr; }
+      .region-info { padding: 36px 24px; }
+      .region-info__grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar solid" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+    <div class="navbar__links">
+      <a href="index.html"        class="navbar__link">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link">Galería</a>
+      <a href="lugares.html"      class="navbar__link active">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link">Cómo Llegar</a>
+    </div>
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta">Reservar</a>
+    </div>
+    <button class="navbar__hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px;align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <span class="page-hero__eyebrow" data-es="Córdoba · Caribe colombiano" data-en="Córdoba · Colombian Caribbean">Córdoba · Caribe colombiano</span>
+      <h1 data-es="Lugares y Playas Cercanas" data-en="Nearby Places & Beaches">Lugares y Playas Cercanas</h1>
+      <p data-es="San Bernardo del Viento es un tesoro natural del Caribe colombiano. Descubre sus playas, paisajes y cultura." data-en="San Bernardo del Viento is a natural treasure of the Colombian Caribbean. Discover its beaches, landscapes, and culture.">
+        San Bernardo del Viento es un tesoro natural del Caribe colombiano. Descubre sus playas, paisajes y cultura.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html">Inicio</a>
+        <span>›</span>
+        <span>Lugares</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+  <section class="section" style="background: var(--off-white);">
+    <div class="container">
+
+      <!-- Playa Venado - FEATURED -->
+      <div class="featured-place fade-in">
+        <div class="featured-place__media" style="background: #1D6FA6; position:relative; overflow:hidden;">
+          <img
+            src="https://lh3.googleusercontent.com/pw/AP1GczOjeejTLaBziCuPrAIg9hHDadsrb71URt500aq48Ews8EsRSk8UyoLqhEifCIBCMFByqLewMNvr1rTJlbxPhz9zVgLM6LUIuJqdBFsh2BsvMTTqjYxdAQa3mU36nuGjVqK6h_9mID77gTYfGnnlLeQ=w900-h600-s-no-gm"
+            alt="Playa Venado frente a Cabaña La Gabriela"
+            loading="lazy"
+            style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"
+          >
+          <div class="featured-place__badge" data-es="⭐ La más cercana" data-en="⭐ The closest">⭐ La más cercana</div>
+        </div>
+        <div class="featured-place__content">
+          <div class="featured-place__eyebrow" data-es="Playa principal · A metros de la cabaña" data-en="Main beach · Steps from the cabin">Playa principal · A metros de la cabaña</div>
+          <h2 class="featured-place__title" data-es="Playa Venado" data-en="Playa Venado">Playa Venado</h2>
+          <p class="featured-place__desc" data-es="La playa frente a la cabaña. Arena fina, aguas cálidas del Caribe y el sonido constante de las olas. Desde la puerta de La Gabriela, solo tienes que cruzar y estás en el mar." data-en="The beach in front of the cabin. Fine sand, warm Caribbean waters, and the constant sound of waves. From La Gabriela's door, just step out and you're in the sea.">
+            La playa frente a la cabaña. Arena fina, aguas cálidas del Caribe y el sonido constante de las olas. Desde la puerta de La Gabriela, solo tienes que cruzar y estás en el mar.
+          </p>
+          <div class="featured-place__highlights">
+            <div class="featured-highlight"><span>🌊</span> <span data-es="Aguas cálidas del Caribe" data-en="Warm Caribbean waters">Aguas cálidas del Caribe</span></div>
+            <div class="featured-highlight"><span>🏄</span> <span data-es="Ideal para baño" data-en="Great for swimming">Ideal para baño</span></div>
+            <div class="featured-highlight"><span>🌅</span> <span data-es="Atardeceres espectaculares" data-en="Spectacular sunsets">Atardeceres espectaculares</span></div>
+            <div class="featured-highlight"><span>🤿</span> <span data-es="Aguas tranquilas" data-en="Calm waters">Aguas tranquilas</span></div>
+          </div>
+          <a href="reservas.html" class="btn btn-primary" data-es="Reservar" data-en="Book now">🏖️ Reservar</a>
+        </div>
+      </div>
+
+      <!-- Grid de lugares -->
+      <div class="section-header fade-in">
+        <span class="eyebrow" data-es="Más destinos" data-en="More destinations">Más destinos</span>
+        <h2 data-es="Explora la región" data-en="Explore the region">Explora la región</h2>
+        <p data-es="Todos estos destinos están accesibles desde la cabaña." data-en="All these destinations are accessible from the cabin.">Todos estos destinos están accesibles desde la cabaña.</p>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="grid-3 stagger">
+
+        <!-- San Bernardo del Viento -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #2A9D8F 0%, #2D6A4F 100%);">
+            🌿
+            <div class="place-card__category" style="background: rgba(42,157,143,0.9); color: white;" data-es="Municipio" data-en="Municipality">Municipio</div>
+            <div class="place-card__distance" data-es="Muy cerca" data-en="Very close">Muy cerca</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="San Bernardo del Viento" data-en="San Bernardo del Viento">San Bernardo del Viento</h3>
+            <p class="place-card__desc" data-es="El municipio costeño de Córdoba donde se ubica la cabaña. Conocido por sus hermosas playas, manglares, gastronomía de mar y la calidez de su gente caribeña. El centro tiene restaurantes, tiendas y cultura local." data-en="The coastal municipality in Córdoba where the cabin is located. Known for its beautiful beaches, mangroves, seafood cuisine, and the warmth of its Caribbean people.">
+              El municipio costeño de Córdoba donde se ubica la cabaña. Conocido por sus playas, manglares, gastronomía de mar y la calidez de su gente caribeña.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Gastronomía" data-en="Food">Gastronomía</span>
+              <span class="place-tag" data-es="Cultura local" data-en="Local culture">Cultura local</span>
+              <span class="place-tag" data-es="Manglares" data-en="Mangroves">Manglares</span>
+              <span class="place-tag" data-es="Pesca" data-en="Fishing">Pesca</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Playa del Viento -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #E63946 0%, #F4A261 100%);">
+            🌅
+            <div class="place-card__category" style="background: rgba(230,57,70,0.9); color: white;" data-es="Playa" data-en="Beach">Playa</div>
+            <div class="place-card__distance" data-es="Zona San Bernardo" data-en="San Bernardo area">Zona San Bernardo</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="Playa del Viento" data-en="Playa del Viento">Playa del Viento</h3>
+            <p class="place-card__desc" data-es="Una de las playas más hermosas de la zona de San Bernardo del Viento. Conocida por sus aguas turquesas y la brisa constante del Caribe. Perfecta para fotografías y atardeceres románticos." data-en="One of the most beautiful beaches in the San Bernardo del Viento area. Known for its turquoise waters and the constant Caribbean breeze. Perfect for photos and romantic sunsets.">
+              Una de las playas más hermosas de San Bernardo del Viento. Aguas turquesas y brisa constante del Caribe. Perfecta para fotografías y atardeceres.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Aguas turquesas" data-en="Turquoise waters">Aguas turquesas</span>
+              <span class="place-tag" data-es="Fotografía" data-en="Photography">Fotografía</span>
+              <span class="place-tag" data-es="Atardeceres" data-en="Sunsets">Atardeceres</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Moñitos -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #1558A0 0%, #1D6FA6 100%);">
+            🐟
+            <div class="place-card__category" style="background: rgba(29,111,166,0.9); color: white;" data-es="Pueblo" data-en="Town">Pueblo</div>
+            <div class="place-card__distance" data-es="Ruta vecina" data-en="Nearby route">Ruta vecina</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="Moñitos" data-en="Moñitos">Moñitos</h3>
+            <p class="place-card__desc" data-es="Municipio costero de Córdoba en la misma ruta que San Bernardo del Viento. Famoso por su festival de la pesca y sus playas poco concurridas. Excelente destino para los amantes del mar tranquilo." data-en="Coastal municipality in Córdoba on the same route as San Bernardo del Viento. Famous for its fishing festival and uncrowded beaches. Excellent for lovers of calm seas.">
+              Municipio costero en la misma ruta. Famoso por su festival de la pesca y playas poco concurridas. Excelente para los amantes del mar tranquilo.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Pesca artesanal" data-en="Artisan fishing">Pesca artesanal</span>
+              <span class="place-tag" data-es="Poco concurrido" data-en="Uncrowded">Poco concurrido</span>
+              <span class="place-tag" data-es="Mar tranquilo" data-en="Calm sea">Mar tranquilo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manglares de la zona -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #2D6A4F 0%, #40916C 100%);">
+            🦜
+            <div class="place-card__category" style="background: rgba(45,106,79,0.9); color: white;" data-es="Naturaleza" data-en="Nature">Naturaleza</div>
+            <div class="place-card__distance" data-es="Zona local" data-en="Local area">Zona local</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="Manglares y Ecoturismo" data-en="Mangroves & Ecotourism">Manglares y Ecoturismo</h3>
+            <p class="place-card__desc" data-es="La costa de San Bernardo del Viento alberga ecosistemas de manglares únicos. Excelentes para tours en canoa o balsa, avistamiento de aves tropicales y conocer la biodiversidad del Caribe colombiano." data-en="The coast of San Bernardo del Viento hosts unique mangrove ecosystems. Excellent for canoe or raft tours, tropical bird watching, and learning about Colombian Caribbean biodiversity.">
+              Ecosistemas de manglares únicos. Excelentes para tours en canoa, avistamiento de aves tropicales y conocer la biodiversidad del Caribe.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Canoa / Balsa" data-en="Canoe / Raft">Canoa / Balsa</span>
+              <span class="place-tag" data-es="Aves tropicales" data-en="Tropical birds">Aves tropicales</span>
+              <span class="place-tag" data-es="Ecoturismo" data-en="Ecotourism">Ecoturismo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lorica -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #FFB703 0%, #F4A261 100%);">
+            🏛️
+            <div class="place-card__category" style="background: rgba(255,183,3,0.9); color: #333;" data-es="Ciudad histórica" data-en="Historic city">Ciudad histórica</div>
+            <div class="place-card__distance" data-es="~1.5 h" data-en="~1.5 h">~1.5 h</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="Lorica" data-en="Lorica">Lorica</h3>
+            <p class="place-card__desc" data-es="Ciudad histórica de Córdoba a orillas del río Sinú. Patrimonio arquitectónico árabe-colombiano, mercado artesanal, restaurantes y cultura sinuana. Un destino cultural a pocas horas de la cabaña." data-en="Historic city in Córdoba on the Sinú River. Arab-Colombian architectural heritage, artisan market, restaurants, and Sinuano culture. A cultural destination a few hours from the cabin.">
+              Ciudad histórica a orillas del río Sinú. Patrimonio arquitectónico árabe-colombiano, mercado artesanal y cultura sinuana.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Patrimonio cultural" data-en="Cultural heritage">Patrimonio cultural</span>
+              <span class="place-tag" data-es="Artesanías" data-en="Crafts">Artesanías</span>
+              <span class="place-tag" data-es="Gastronomía" data-en="Food">Gastronomía</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Montería -->
+        <div class="place-card fade-in">
+          <div class="place-card__media" style="background: linear-gradient(135deg, #C1121F 0%, #E63946 100%);">
+            🏙️
+            <div class="place-card__category" style="background: rgba(193,18,31,0.9); color: white;" data-es="Capital departamental" data-en="Departmental capital">Capital departamental</div>
+            <div class="place-card__distance" data-es="~2 h" data-en="~2 h">~2 h</div>
+          </div>
+          <div class="place-card__content">
+            <h3 class="place-card__title" data-es="Montería" data-en="Montería">Montería</h3>
+            <p class="place-card__desc" data-es="Capital de Córdoba con aeropuerto internacional. Ciudad moderna con el malecón del río Sinú, centros comerciales, gastronomía y vida nocturna. Punto de llegada para muchos visitantes que luego van a la costa." data-en="Capital of Córdoba with an international airport. Modern city with the Sinú River boardwalk, malls, gastronomy, and nightlife. Arrival point for many visitors heading to the coast.">
+              Capital de Córdoba con aeropuerto internacional. Ciudad moderna con el malecón del río Sinú, restaurantes y comercio.
+            </p>
+            <div class="place-card__tags">
+              <span class="place-tag" data-es="Aeropuerto" data-en="Airport">Aeropuerto</span>
+              <span class="place-tag" data-es="Malecón" data-en="Boardwalk">Malecón</span>
+              <span class="place-tag" data-es="Gastronomía" data-en="Food">Gastronomía</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Region info block -->
+      <div class="region-info fade-in">
+        <div class="region-info__grid">
+          <div>
+            <span style="display:block; font-family:var(--font-script); font-size:1.5rem; color:var(--sand); margin-bottom:8px;" data-es="Sobre la región" data-en="About the region">Sobre la región</span>
+            <h2 style="font-family:var(--font-heading); font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; color:white; margin-bottom:16px;" data-es="El Caribe cordobés" data-en="The Cordoban Caribbean">El Caribe cordobés</h2>
+            <p style="color:rgba(255,255,255,0.65); line-height:1.7; margin-bottom:24px; font-size:0.95rem;" data-es="El norte de Córdoba esconde uno de los Caribes más auténticos y menos turísticos de Colombia. Playas vírgenes, comunidades pesqueras, manglares imponentes y una hospitalidad que solo se consigue en el Caribe colombiano profundo. Venir aquí es alejarse del turismo masivo y conectar con lo genuino." data-en="Northern Córdoba hides one of the most authentic and least touristy Caribbeans in Colombia. Virgin beaches, fishing communities, impressive mangroves, and a hospitality that can only be found in the deep Colombian Caribbean. Coming here means stepping away from mass tourism and connecting with the genuine.">
+              El norte de Córdoba esconde uno de los Caribes más auténticos de Colombia. Playas vírgenes, comunidades pesqueras, manglares imponentes y una hospitalidad genuina.
+            </p>
+            <a href="reservas.html" class="btn btn-secondary btn-lg" data-es="Reservar y explorar" data-en="Book and explore">🌴 Reservar y explorar</a>
+          </div>
+          <div class="region-info__facts">
+            <div class="region-fact">
+              <div class="region-fact__icon">🌡️</div>
+              <div>
+                <div class="region-fact__title" data-es="Clima tropical todo el año" data-en="Tropical climate year-round">Clima tropical todo el año</div>
+                <div class="region-fact__text" data-es="Temperatura promedio de 28-32°C. Mejor época: diciembre a abril (temporada seca)." data-en="Average temperature 28-32°C. Best time: December to April (dry season).">Temperatura promedio 28-32°C. Mejor época: diciembre a abril.</div>
+              </div>
+            </div>
+            <div class="region-fact">
+              <div class="region-fact__icon">🐠</div>
+              <div>
+                <div class="region-fact__title" data-es="Biodiversidad marina" data-en="Marine biodiversity">Biodiversidad marina</div>
+                <div class="region-fact__text" data-es="Corales, peces tropicales, tortugas y delfines en las aguas del Caribe colombiano." data-en="Corals, tropical fish, turtles and dolphins in the Colombian Caribbean waters.">Corales, peces tropicales, tortugas y delfines en sus aguas.</div>
+              </div>
+            </div>
+            <div class="region-fact">
+              <div class="region-fact__icon">🍤</div>
+              <div>
+                <div class="region-fact__title" data-es="Gastronomía de mar" data-en="Seafood cuisine">Gastronomía de mar</div>
+                <div class="region-fact__text" data-es="Pargo frito, camarones, langosta, arroz con coco y patacones. La cocina costeña en su máxima expresión." data-en="Fried red snapper, shrimp, lobster, coconut rice, and patacones. Coastal cuisine at its finest.">Pargo frito, camarones, langosta, arroz con coco y patacones.</div>
+              </div>
+            </div>
+            <div class="region-fact">
+              <div class="region-fact__icon">🎵</div>
+              <div>
+                <div class="region-fact__title" data-es="Cultura caribeña auténtica" data-en="Authentic Caribbean culture">Cultura caribeña auténtica</div>
+                <div class="region-fact__text" data-es="Cumbia, porro, mapalé. Festivales locales, artesanías y una alegría que solo se vive en el Caribe." data-en="Cumbia, porro, mapalé. Local festivals, crafts, and a joy that can only be experienced in the Caribbean.">Cumbia, porro, mapalé. Festivales locales y la alegría del Caribe.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p>Tu cabaña tropical frente al Caribe en San Bernardo del Viento.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link sl-whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link sl-instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link sl-tiktok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+            TikTok
+          </a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link sl-facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="lugares.html">Lugares</a></li>
+          <li><a href="como-llegar.html">Cómo Llegar</a></li>
+          <li><a href="reservas.html">Reservar</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Playas</h4>
+        <ul>
+          <li><a href="#">Playa Venado</a></li>
+          <li><a href="#">Playa del Viento</a></li>
+          <li><a href="#">Playas San Bernardo</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <div class="footer__contact-item"><span>📱</span><a href="https://wa.me/573137549732">+57 313 754 9732</a></div>
+        <div class="footer__contact-item"><span>📍</span><span>Playa Venado, San Bernardo del Viento, Córdoba</span></div>
+      </div>
+    </div>
+    <div class="footer__bottom"><p>© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia</p></div>
+  </div>
+</footer>
+
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble">¡Escríbenos!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4" target="_blank" rel="noopener" class="whatsapp-float__btn" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>

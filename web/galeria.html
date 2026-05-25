@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Galería de fotos y videos de Cabaña La Gabriela en San Bernardo del Viento. Ver fotos de la cabaña, habitaciones, playa y alrededores.">
+  <title>Galería | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .gallery-filters {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .gallery-filter-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 2px solid var(--gray-border);
+      color: var(--gray);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+    }
+    .gallery-filter-btn.active,
+    .gallery-filter-btn:hover {
+      border-color: var(--ocean);
+      color: var(--ocean);
+      background: rgba(29,111,166,0.06);
+    }
+    .gallery-filter-btn.active {
+      background: var(--ocean);
+      color: white;
+      border-color: var(--ocean);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .gallery-item {
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      display: block;
+    }
+    .gallery-item--tall { grid-row: span 2; }
+    .gallery-item--wide { grid-column: span 2; }
+    .gallery-item__media {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item__media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover .gallery-item__media { transform: scale(1.04); }
+    .gallery-item:hover img { transform: scale(1.04); }
+    .gallery-item__overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.0);
+      transition: background 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gallery-item:hover .gallery-item__overlay {
+      background: rgba(0,0,0,0.3);
+    }
+    .gallery-item__zoom {
+      font-size: 1.8rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s;
+      color: white;
+    }
+    .gallery-item:hover .gallery-item__zoom { opacity: 1; transform: scale(1); }
+    .gallery-item__caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 16px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.3s;
+    }
+    .gallery-item:hover .gallery-item__caption { opacity: 1; transform: translateY(0); }
+
+    /* Video section */
+    .video-section {
+      background: var(--dark);
+      padding: 80px 0;
+      text-align: center;
+      color: white;
+    }
+    .video-container {
+      position: relative;
+      max-width: 800px;
+      margin: 40px auto 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      background: var(--dark-medium);
+    }
+    .video-placeholder {
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      background: linear-gradient(135deg, #1D6FA6, #2A9D8F);
+      color: white;
+    }
+    .video-placeholder__icon { font-size: 4rem; }
+    .video-placeholder__text { font-size: 1rem; opacity: 0.8; }
+    .video-placeholder__note { font-size: 0.82rem; opacity: 0.5; }
+
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item--tall, .gallery-item--wide { grid-row: span 1; grid-column: span 1; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar solid" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+    <div class="navbar__links">
+      <a href="index.html"        class="navbar__link">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link active">Galería</a>
+      <a href="lugares.html"      class="navbar__link">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link">Cómo Llegar</a>
+    </div>
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta">Reservar</a>
+    </div>
+    <button class="navbar__hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px;align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <span class="page-hero__eyebrow" data-es="Fotos y videos reales" data-en="Real photos and videos">Fotos y videos reales</span>
+      <h1 data-es="Galería" data-en="Gallery">Galería</h1>
+      <p data-es="Descubre la belleza de Cabaña La Gabriela: la playa, las habitaciones y el Caribe colombiano desde todos los ángulos." data-en="Discover the beauty of Cabaña La Gabriela: the beach, rooms, and Colombian Caribbean from every angle.">
+        Descubre la belleza de Cabaña La Gabriela: la playa, las habitaciones y el Caribe colombiano desde todos los ángulos.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html">Inicio</a>
+        <span>›</span>
+        <span>Galería</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DRONE VIDEO -->
+<section class="video-section">
+  <div class="container">
+    <span class="eyebrow" style="color:var(--sand);" data-es="Video aéreo con dron" data-en="Aerial drone video">Video aéreo con dron</span>
+    <h2 class="heading-lg" style="margin-top:8px;" data-es="La Gabriela desde las alturas" data-en="La Gabriela from above">La Gabriela desde las alturas</h2>
+    <p style="color:rgba(255,255,255,0.6); margin-top:8px; font-size:0.95rem;" data-es="Video grabado con dron mostrando la cabaña, la playa y el mar Caribe." data-en="Drone video showing the cabin, beach, and Caribbean Sea.">
+      Video grabado con dron mostrando la cabaña, la playa y el mar Caribe.
+    </p>
+    <div class="video-container">
+      <!--
+        INSTRUCCIONES PARA SUBIR EL VIDEO DEL DRON:
+        1. Sube drone.MP4 a YouTube (no listado) o Cloudinary/Vimeo
+        2. Reemplaza el div de abajo por el iframe de embed:
+
+        Para YouTube:
+        <iframe width="100%" style="aspect-ratio:16/9;" src="https://www.youtube.com/embed/TU_VIDEO_ID?autoplay=0&rel=0" frameborder="0" allowfullscreen></iframe>
+
+        Para Cloudinary (video directo):
+        <video width="100%" style="aspect-ratio:16/9;" controls poster="img/hero.jpg">
+          <source src="TU_URL_CLOUDINARY/drone.mp4" type="video/mp4">
+        </video>
+      -->
+      <div class="video-placeholder">
+        <div class="video-placeholder__icon">🎬</div>
+        <div class="video-placeholder__text" data-es="Video del dron — próximamente" data-en="Drone video — coming soon">Video del dron — próximamente</div>
+        <div class="video-placeholder__note" data-es="Sube el video a YouTube o Cloudinary y reemplaza este bloque con el iframe." data-en="Upload the video to YouTube or Cloudinary and replace this block with the iframe.">
+          Sube drone.MP4 a YouTube / Cloudinary y reemplaza este bloque con el iframe.
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="btn btn-outline">
+        📷 <span data-es="Ver en Instagram" data-en="View on Instagram">Ver en Instagram</span>
+      </a>
+      <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="btn btn-outline">
+        🎵 <span data-es="Ver en TikTok" data-en="View on TikTok">Ver en TikTok</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE PHOTOS ALBUM EMBED -->
+<section class="section" style="background: white; padding-bottom: 0;">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="eyebrow" data-es="Álbum completo" data-en="Full album">Álbum completo</span>
+      <h2 data-es="Fotos de la Cabaña" data-en="Cabin Photos">Fotos de la Cabaña</h2>
+      <p data-es="Mira todas las fotos reales de la cabaña, habitaciones, playa y alrededores." data-en="See all real photos of the cabin, rooms, beach, and surroundings.">
+        Mira todas las fotos reales de la cabaña, habitaciones, playa y alrededores.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="fade-in" style="text-align:center; margin-bottom: 32px;">
+      <!-- Embed del álbum de Google Photos -->
+      <div style="
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        max-width: 900px;
+        margin: 0 auto 24px;
+        background: var(--gray-light);
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        padding: 48px 24px;
+      ">
+        <!--
+          Google Photos no permite embed directo por iframe (bloquea iframes externos).
+          La mejor forma es usar el botón de acceso directo al álbum.
+        -->
+        <div style="font-size: 4rem;">📷</div>
+        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--dark);"
+            data-es="Ver el álbum completo"
+            data-en="View the full album">
+          Ver el álbum completo
+        </h3>
+        <p style="color: var(--gray); max-width: 440px; line-height: 1.6; font-size: 0.95rem;"
+           data-es="Todas las fotos de la cabaña, habitaciones, playa y alrededores en alta resolución."
+           data-en="All high-resolution photos of the cabin, rooms, beach, and surroundings.">
+          Todas las fotos de la cabaña, habitaciones, playa y alrededores en alta resolución.
+        </p>
+        <a href="https://photos.app.goo.gl/cGjDDX1LkhkDeod87"
+           target="_blank" rel="noopener"
+           class="btn btn-primary btn-lg">
+          📷 <span data-es="Ver todas las fotos" data-en="View all photos">Ver todas las fotos</span>
+        </a>
+        <p style="font-size: 0.78rem; color: var(--gray);"
+           data-es="Se abre en Google Photos — sin necesidad de cuenta"
+           data-en="Opens in Google Photos — no account needed">
+          Se abre en Google Photos — sin necesidad de cuenta
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section class="section" style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="eyebrow" data-es="Fotos de la cabaña" data-en="Cabin photos">Fotos de la cabaña</span>
+      <h2 data-es="Muestra de imágenes" data-en="Photo preview">Muestra de imágenes</h2>
+      <p data-es="Una selección de fotos. Para ver todas, abre el álbum completo arriba." data-en="A photo selection. To see all, open the full album above.">
+        Una selección de fotos. Para ver todas, abre el álbum completo arriba.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="gallery-filters">
+      <button class="gallery-filter-btn active" data-filter="all" onclick="filterGallery(this, 'all')" data-es="Todo" data-en="All">Todo</button>
+      <button class="gallery-filter-btn" data-filter="exterior" onclick="filterGallery(this, 'exterior')" data-es="Exterior & Playa" data-en="Exterior & Beach">Exterior & Playa</button>
+      <button class="gallery-filter-btn" data-filter="habitaciones" onclick="filterGallery(this, 'habitaciones')" data-es="Habitaciones" data-en="Rooms">Habitaciones</button>
+      <button class="gallery-filter-btn" data-filter="areas" onclick="filterGallery(this, 'areas')" data-es="Áreas comunes" data-en="Common areas">Áreas comunes</button>
+      <button class="gallery-filter-btn" data-filter="playa" onclick="filterGallery(this, 'playa')" data-es="Playa Venado" data-en="Playa Venado">Playa Venado</button>
+    </div>
+
+    <!--
+      INSTRUCCIONES PARA AGREGAR TUS FOTOS:
+      1. Copia tus fotos (hero.jpg, fachada.jpg, habitacion.jpg, extra1-extra8.jpg, etc.)
+         a la carpeta: web/img/
+      2. Reemplaza los emoji/gradientes por etiquetas <img> reales:
+         <img src="img/fachada.jpg" alt="Fachada Cabaña La Gabriela" loading="lazy">
+      3. Puedes agregar tantas fotos como quieras siguiendo el patrón de cada .gallery-item
+    -->
+    <div class="gallery-grid fade-in" id="galleryGrid">
+
+      <!-- 1 — Fachada principal (tall) -->
+      <div class="gallery-item gallery-item--tall" data-category="exterior">
+        <div class="gallery-item__media" style="position:relative;">
+          <img src="img/Hero.jpg" alt="Cabaña La Gabriela — fachada frente al mar" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Cabaña La Gabriela — frente al mar" data-en="Cabaña La Gabriela — beachfront">Cabaña La Gabriela — frente al mar</div>
+      </div>
+
+      <!-- 2 — Vista aérea con olas -->
+      <div class="gallery-item" data-category="exterior playa">
+        <div class="gallery-item__media">
+          <img src="img/DJI_0628.jpg" alt="Vista aérea de la cabaña con el mar Caribe" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Vista aérea — frente a las olas" data-en="Aerial view — facing the waves">Vista aérea — frente a las olas</div>
+      </div>
+
+      <!-- 3 — Vista aérea completa -->
+      <div class="gallery-item" data-category="exterior">
+        <div class="gallery-item__media">
+          <img src="img/DJI_0621.jpg" alt="Cabaña La Gabriela vista desde el dron" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Vista completa desde el dron" data-en="Full drone view">Vista completa desde el dron</div>
+      </div>
+
+      <!-- 4 — Exterior área social (wide) -->
+      <div class="gallery-item gallery-item--wide" data-category="exterior areas">
+        <div class="gallery-item__media">
+          <img src="img/DSC_0002.jpg" alt="Área social exterior y balcón del primer piso" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Área social exterior — Primer Piso" data-en="Outdoor social area — First Floor">Área social exterior — Primer Piso</div>
+      </div>
+
+      <!-- 5 — Interior Piso 1 -->
+      <div class="gallery-item" data-category="areas habitaciones">
+        <div class="gallery-item__media">
+          <img src="img/DSC_0022.jpg" alt="Interior primer piso — zona común con acceso a habitaciones" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Interior Piso 1 — zona común" data-en="Interior Floor 1 — common area">Interior Piso 1 — zona común</div>
+      </div>
+
+      <!-- 6 — Vista al mar desde adentro -->
+      <div class="gallery-item" data-category="areas playa">
+        <div class="gallery-item__media">
+          <img src="img/DSC_0024.jpg" alt="Vista al mar Caribe desde el interior de la cabaña" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Vista al mar desde adentro" data-en="Sea view from inside">Vista al mar desde adentro</div>
+      </div>
+
+      <!-- 7 — Comedor con vista al mar (tall) -->
+      <div class="gallery-item gallery-item--tall" data-category="areas">
+        <div class="gallery-item__media" style="position:relative;">
+          <img src="img/DSC_0025.jpg" alt="Comedor con sillas turquesa y vista al mar Caribe" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Comedor — vista al Caribe" data-en="Dining area — Caribbean view">Comedor — vista al Caribe</div>
+      </div>
+
+      <!-- 8 — Terraza / balcón Piso 2 desde interior -->
+      <div class="gallery-item" data-category="areas exterior">
+        <div class="gallery-item__media">
+          <img src="img/DSC_0058.jpg" alt="Vista hacia la terraza del segundo piso" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Hacia la terraza — Piso 2" data-en="Toward the terrace — Floor 2">Hacia la terraza — Piso 2</div>
+      </div>
+
+      <!-- 9 — Asoleadero -->
+      <div class="gallery-item" data-category="exterior areas">
+        <div class="gallery-item__media">
+          <img src="img/Asoleadero.jpg" alt="Asoleadero con vista panorámica al mar Caribe" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="gallery-item__overlay"><div class="gallery-item__zoom">🔍</div></div>
+        <div class="gallery-item__caption" data-es="Asoleadero — vista panorámica" data-en="Sun deck — panoramic view">Asoleadero — vista panorámica</div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-32 fade-in">
+      <p class="text-gray mb-16" data-es="¿Quieres ver más? Síguenos en nuestras redes." data-en="Want to see more? Follow us on social media.">¿Quieres ver más? Síguenos en nuestras redes.</p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="btn btn-primary">📷 @lagabriela06</a>
+        <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="btn btn-ocean">🎵 @la_gabriela06</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding:64px 0; text-align:center; color:white;">
+  <div class="container">
+    <h2 class="heading-lg" data-es="¿Te gustó lo que ves?" data-en="Like what you see?">¿Te gustó lo que ves?</h2>
+    <p style="opacity:0.85; margin:12px 0 32px; font-size:1.05rem;" data-es="Reserva tu estadía ahora y vívelo en persona." data-en="Book your stay now and experience it in person.">Reserva tu estadía ahora y vívelo en persona.</p>
+    <a href="reservas.html" class="btn btn-outline btn-xl" data-es="Reservar Ahora" data-en="Book Now">🏖️ Reservar Ahora</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p>Tu cabaña tropical frente al Caribe en San Bernardo del Viento.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link sl-whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link sl-instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link sl-tiktok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+            TikTok
+          </a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link sl-facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="lugares.html">Lugares</a></li>
+          <li><a href="como-llegar.html">Cómo Llegar</a></li>
+          <li><a href="reservas.html">Reservar</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <div class="footer__contact-item"><span>📱</span><a href="https://wa.me/573137549732">+57 313 754 9732</a></div>
+        <div class="footer__contact-item"><span>📷</span><a href="https://instagram.com/lagabriela06">@lagabriela06</a></div>
+      </div>
+      <div class="footer__col">
+        <h4>Ubicación</h4>
+        <div class="footer__contact-item"><span>📍</span><span>Playa Venado, San Bernardo del Viento, Córdoba</span></div>
+        <a href="como-llegar.html" class="btn btn-accent btn-sm mt-16" style="display:inline-flex;">Cómo llegar</a>
+      </div>
+    </div>
+    <div class="footer__bottom"><p>© 2025 Cabaña La Gabriela · San Bernardo del Viento, Córdoba, Colombia</p></div>
+  </div>
+</footer>
+
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble">¡Escríbenos!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4" target="_blank" rel="noopener" class="whatsapp-float__btn" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+
+<script src="js/main.js"></script>
+<script>
+function filterGallery(btn, filter) {
+  document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const cats = (item.dataset.category || '').split(' ');
+    item.style.display = (filter === 'all' || cats.includes(filter)) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

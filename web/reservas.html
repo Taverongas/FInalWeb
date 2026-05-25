@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reserva tu estadía en Cabaña La Gabriela, San Bernardo del Viento. Alquiler vacacional frente al mar Caribe en Córdoba, Colombia.">
+  <title>Reservar | Cabaña La Gabriela</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .reserva-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      align-items: start;
+    }
+    /* Form */
+    .form-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    .form-card__header {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--ocean-dark) 100%);
+      padding: 32px 36px;
+      color: white;
+    }
+    .form-card__header h2 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .form-card__header p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .form-card__body { padding: 36px; }
+    .form-divider {
+      border: none;
+      border-top: 1px solid var(--gray-border);
+      margin: 28px 0;
+    }
+    .form-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-submit-area {
+      background: var(--off-white);
+      padding: 24px 36px;
+      border-top: 1px solid var(--gray-border);
+    }
+    .form-submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: #25D366;
+      color: white;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .form-submit-btn:hover {
+      background: #1dab55;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+    }
+    .form-submit-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 12px;
+    }
+
+    /* Sidebar */
+    .sidebar-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .sidebar-card__header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .sidebar-card__title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .sidebar-card__body { padding: 20px 24px; }
+
+    .cabin-preview {
+      position: relative;
+      height: 180px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--accent) 100%);
+      font-size: 4rem;
+    }
+    .cabin-preview img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+    }
+    .cabin-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cabin-meta__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--gray);
+    }
+    .cabin-meta__item span:first-child { font-size: 1rem; margin-top: 1px; }
+    .cabin-meta__item strong { color: var(--dark); display: block; }
+
+    .amenity-mini {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .amenity-mini__item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    .amenity-mini__item span:first-child { font-size: 0.9rem; }
+
+    .quick-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quick-contact__link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--gray-border);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--dark);
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .quick-contact__link:hover { border-color: var(--ocean); color: var(--ocean); }
+    .quick-contact__link.whatsapp { background: #25D366; border-color: #25D366; color: white; }
+    .quick-contact__link.whatsapp:hover { background: #1dab55; }
+    .quick-contact__link span:first-child { font-size: 1.1rem; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--gray-border);
+      padding: 14px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .faq-q::after { content: '▾'; color: var(--gray); flex-shrink:0; }
+    .faq-a {
+      font-size: 0.82rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* Chef card selected state */
+    .chef-radio:checked + .chef-card {
+      border-color: var(--accent) !important;
+      background: rgba(42,157,143,0.07) !important;
+      box-shadow: 0 0 0 3px rgba(42,157,143,0.15) !important;
+    }
+    @media (max-width: 960px) {
+      .reserva-layout { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .form-card__body { padding: 24px; }
+      .form-submit-area { padding: 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar solid" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">🌴</span>
+      <span>
+        <span class="navbar__logo-text">La Gabriela</span>
+        <span class="navbar__logo-sub">San Bernardo del Viento</span>
+      </span>
+    </a>
+    <div class="navbar__links">
+      <a href="index.html"        class="navbar__link">Inicio</a>
+      <a href="habitaciones.html" class="navbar__link">Habitaciones</a>
+      <a href="galeria.html"      class="navbar__link">Galería</a>
+      <a href="lugares.html"      class="navbar__link">Lugares</a>
+      <a href="como-llegar.html"  class="navbar__link">Cómo Llegar</a>
+    </div>
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="reservas.html" class="navbar__cta active">Reservar</a>
+    </div>
+    <button class="navbar__hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="navbar__mobile" id="mobileMenu">
+  <a href="index.html"        class="navbar__link">🏠 Inicio</a>
+  <a href="habitaciones.html" class="navbar__link">🛏️ Habitaciones</a>
+  <a href="galeria.html"      class="navbar__link">📷 Galería</a>
+  <a href="lugares.html"      class="navbar__link">🗺️ Lugares</a>
+  <a href="como-llegar.html"  class="navbar__link">📍 Cómo Llegar</a>
+  <a href="reservas.html"     class="navbar__cta">Reservar Ahora</a>
+  <div class="lang-toggle" style="margin-top:8px;align-self:flex-start;">
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__content">
+      <span class="page-hero__eyebrow" data-es="Confirmación por WhatsApp y correo" data-en="Confirmation via WhatsApp and email">Confirmación por WhatsApp y correo</span>
+      <h1 data-es="Reserva tu Estadía" data-en="Book Your Stay">Reserva tu Estadía</h1>
+      <p data-es="Elige tu plan, calcula el precio y envía tu solicitud. Te confirmamos en minutos." data-en="Choose your plan, calculate the price and send your request. We'll confirm in minutes.">
+        Elige tu plan, calcula el precio y envía tu solicitud. Te confirmamos en minutos.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html">Inicio</a>
+        <span>›</span>
+        <span data-es="Reservar" data-en="Book">Reservar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--  SECCIÓN: DISPONIBILIDAD                                    -->
+<!-- ============================================================ -->
+<section id="disponibilidad" style="background: white; padding: 56px 0 48px;">
+  <div class="container">
+    <div class="section-header fade-in" style="margin-bottom:32px;">
+      <span class="eyebrow" data-es="Consulta antes de reservar" data-en="Check before booking">Consulta antes de reservar</span>
+      <h2 data-es="Disponibilidad" data-en="Availability">Disponibilidad</h2>
+      <p data-es="Verifica las fechas disponibles según el plan que deseas. Las fechas marcadas ya tienen reserva." data-en="Check available dates for your desired plan. Marked dates already have a booking.">
+        Verifica las fechas disponibles según el plan que deseas. Las fechas marcadas ya tienen reserva.
+      </p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="max-width: 780px; margin: 0 auto;">
+      <!-- Leyenda -->
+      <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; justify-content:center;">
+        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--gray);">
+          <span style="width:14px;height:14px;border-radius:3px;background:#E8F5E9;border:1px solid #81C784;display:inline-block;"></span> Disponible
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--gray);">
+          <span style="width:14px;height:14px;border-radius:3px;background:#FFF3E0;border:2px solid #FFB703;display:inline-block;"></span> Piso 1 reservado
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--gray);">
+          <span style="width:14px;height:14px;border-radius:3px;background:#E3F2FD;border:2px solid #1D6FA6;display:inline-block;"></span> 2° Piso reservado
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--gray);">
+          <span style="width:14px;height:14px;border-radius:3px;background:#FCE4EC;border:2px solid #E63946;display:inline-block;"></span> Cabaña completa
+        </div>
+      </div>
+
+      <!-- Navegación del mes -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+        <button id="calPrev" onclick="calPrevMonth()" style="padding:8px 16px; border:2px solid var(--gray-border); border-radius:var(--radius-sm); background:white; cursor:pointer; font-family:var(--font-body); font-size:0.875rem; font-weight:600; color:var(--dark); transition:all 0.2s;">← Anterior</button>
+        <h3 id="calTitle" style="font-family:var(--font-heading); font-size:1.2rem; font-weight:700; color:var(--dark); text-align:center;"></h3>
+        <button id="calNext" onclick="calNextMonth()" style="padding:8px 16px; border:2px solid var(--gray-border); border-radius:var(--radius-sm); background:white; cursor:pointer; font-family:var(--font-body); font-size:0.875rem; font-weight:600; color:var(--dark); transition:all 0.2s;">Siguiente →</button>
+      </div>
+
+      <!-- Grid del calendario -->
+      <div id="calGrid" style="border:1px solid var(--gray-border); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-xs);">
+        <!-- Días de la semana -->
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); background:var(--dark);">
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Dom</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Lun</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Mar</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Mié</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Jue</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Vie</div>
+          <div style="text-align:center; padding:10px 4px; font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em;">Sáb</div>
+        </div>
+        <!-- Días del mes -->
+        <div id="calDays" style="display:grid; grid-template-columns:repeat(7,1fr); background:white;"></div>
+      </div>
+
+      <p style="text-align:center; margin-top:12px; font-size:0.78rem; color:var(--gray);" data-es="Las fechas sin bloqueo están disponibles. Algunas reservas pendientes de confirmación pueden no aparecer." data-en="Unblocked dates are available. Some pending bookings may not appear.">
+        Las fechas sin bloqueo están disponibles. Algunas reservas pendientes de confirmación pueden no aparecer.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="section" style="background: var(--off-white);">
+  <div class="container">
+    <div class="reserva-layout">
+
+      <!-- FORM -->
+      <div class="fade-in">
+        <form class="form-card" id="reservaForm" novalidate>
+          <div class="form-card__header">
+            <h2 data-es="Solicitar Reserva" data-en="Request Booking">Solicitar Reserva</h2>
+            <p data-es="Llena el formulario y recibirás confirmación por WhatsApp y correo electrónico." data-en="Fill the form and you'll receive confirmation via WhatsApp and email.">
+              Llena el formulario y recibirás confirmación por WhatsApp y correo electrónico.
+            </p>
+          </div>
+
+          <div class="form-card__body">
+            <!-- Sección 1: Tus datos -->
+            <div class="form-section-title">👤 <span data-es="Tus datos" data-en="Your details">Tus datos</span></div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" data-es="Nombre completo" data-en="Full name">
+                  Nombre completo <span class="required">*</span>
+                </label>
+                <input type="text" name="nombre" class="form-control" required
+                  data-es-placeholder="Tu nombre completo" data-en-placeholder="Your full name"
+                  placeholder="Tu nombre completo">
+                <span class="form-error" data-es="Por favor ingresa tu nombre" data-en="Please enter your name">Por favor ingresa tu nombre</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-es="Teléfono / WhatsApp" data-en="Phone / WhatsApp">
+                  Teléfono / WhatsApp <span class="required">*</span>
+                </label>
+                <input type="tel" name="telefono" class="form-control" required
+                  data-es-placeholder="+57 300 000 0000" data-en-placeholder="+57 300 000 0000"
+                  placeholder="+57 300 000 0000">
+                <span class="form-error" data-es="Por favor ingresa tu teléfono" data-en="Please enter your phone">Por favor ingresa tu teléfono</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-es="Correo electrónico" data-en="Email address">
+                Correo electrónico <span class="required">*</span>
+              </label>
+              <input type="email" name="correo" class="form-control" required
+                data-es-placeholder="tu@correo.com" data-en-placeholder="your@email.com"
+                placeholder="tu@correo.com">
+              <span class="form-error" data-es="Ingresa un correo válido (ej: nombre@correo.com)" data-en="Enter a valid email (e.g. name@email.com)">Ingresa un correo válido (ej: nombre@correo.com)</span>
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- Sección 2: Fechas -->
+            <div class="form-section-title">📅 <span data-es="Fechas de estadía" data-en="Stay dates">Fechas de estadía</span></div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" data-es="Fecha de llegada" data-en="Check-in date">
+                  Fecha de llegada <span class="required">*</span>
+                </label>
+                <input type="date" name="entrada" class="form-control" required>
+                <span class="form-error" data-es="Selecciona la fecha de llegada" data-en="Select check-in date">Selecciona la fecha de llegada</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-es="Fecha de salida" data-en="Check-out date">
+                  Fecha de salida <span class="required">*</span>
+                </label>
+                <input type="date" name="salida" class="form-control" required>
+                <span class="form-error" data-es="Selecciona la fecha de salida" data-en="Select check-out date">Selecciona la fecha de salida</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-es="Número de huéspedes" data-en="Number of guests">
+                Número de huéspedes <span class="required">*</span>
+              </label>
+              <input type="number" name="huespedes" class="form-control" required
+                min="1" max="40" placeholder="Ej: 12"
+                data-es-placeholder="Ej: 12" data-en-placeholder="E.g.: 12">
+              <span class="form-hint" id="huespedesHint" style="font-size:0.78rem; color:var(--gray); margin-top:4px; display:block;">
+                Piso 1: máx. 12 · Piso 2+Terraza: máx. 20 · Cabaña completa: máx. 40
+              </span>
+              <span class="form-error" id="huespedesError">Selecciona el número de huéspedes</span>
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- Sección 3: Plan de alquiler -->
+            <div class="form-section-title">🏠 <span data-es="Elige tu plan" data-en="Choose your plan">Elige tu plan</span></div>
+
+            <div class="plan-options" id="planOptions">
+
+              <!-- Piso 1 -->
+              <label class="plan-option">
+                <input type="radio" name="plan" value="piso1" data-price="1000000" data-max="12" required>
+                <div class="plan-card">
+                  <img src="img/DSC_0002.jpg" alt="Primer Piso" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;margin-bottom:8px;display:block;">
+                  <div class="plan-card__name" data-es="Primer Piso" data-en="First Floor">Primer Piso</div>
+                  <div class="plan-card__desc">3 hab. · hasta 12 pers. · 2 baños</div>
+                  <div class="plan-card__price">$1.000.000 / noche</div>
+                </div>
+              </label>
+
+              <!-- Piso 2 + 3 -->
+              <label class="plan-option">
+                <input type="radio" name="plan" value="piso2" data-price="1500000" data-max="20">
+                <div class="plan-card">
+                  <img src="img/Asoleadero.jpg" alt="2° Piso + Terraza" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;margin-bottom:8px;display:block;">
+                  <div class="plan-card__name" data-es="2° Piso + Terraza" data-en="2nd Floor + Rooftop">2° Piso + Terraza</div>
+                  <div class="plan-card__desc">4 hab. · hasta 20 pers. · incl. 3er piso</div>
+                  <div class="plan-card__price">$1.500.000 / noche</div>
+                </div>
+              </label>
+
+              <!-- Cabaña completa -->
+              <label class="plan-option">
+                <input type="radio" name="plan" value="completa" data-price="2000000" data-max="40">
+                <div class="plan-card">
+                  <img src="img/Hero.jpg" alt="Cabaña Completa" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;margin-bottom:8px;display:block;">
+                  <div class="plan-card__name" data-es="Cabaña Completa" data-en="Full Cabin">Cabaña Completa</div>
+                  <div class="plan-card__desc">7 hab. + terraza · hasta 40+ pers.</div>
+                  <div class="plan-card__price">$2.000.000 / noche</div>
+                </div>
+              </label>
+
+            </div>
+            <span class="form-error" id="planError" style="display:none; margin-top:8px; color:var(--primary); font-size:0.82rem;">
+              Por favor selecciona un plan.
+            </span>
+
+            <!-- Calculadora de precio -->
+            <div class="price-calculator" id="priceCalculator">
+              <div class="price-calc__row">
+                <span class="price-calc__label">Plan seleccionado</span>
+                <span class="price-calc__value" id="calcPlan">—</span>
+              </div>
+              <div class="price-calc__row">
+                <span class="price-calc__label">Precio por noche</span>
+                <span class="price-calc__value" id="calcPriceNight">—</span>
+              </div>
+              <div class="price-calc__row">
+                <span class="price-calc__label">Noches</span>
+                <span class="price-calc__value" id="calcNights">—</span>
+              </div>
+              <div class="price-calc__total">
+                <span class="price-calc__total-label">Total estimado</span>
+                <span class="price-calc__total-value" id="calcTotal">—</span>
+              </div>
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- Sección 4: Cocinero -->
+            <div class="form-section-title">👨‍🍳 <span data-es="Servicio de cocinero" data-en="Chef service">Servicio de cocinero</span></div>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+              <label style="flex:1; min-width:140px; cursor:pointer;">
+                <input type="radio" name="cocinero" value="no" checked style="display:none;" class="chef-radio">
+                <div class="plan-card chef-card" style="padding:14px 18px; flex-direction:row; align-items:center; gap:10px; text-align:left;">
+                  <span style="font-size:1.4rem;">🚫</span>
+                  <div>
+                    <div style="font-weight:700; font-size:0.9rem; color:var(--dark);">Sin cocinero</div>
+                    <div style="font-size:0.75rem; color:var(--gray);">Cocina disponible para uso propio</div>
+                  </div>
+                </div>
+              </label>
+              <label style="flex:1; min-width:140px; cursor:pointer;">
+                <input type="radio" name="cocinero" value="si" style="display:none;" class="chef-radio">
+                <div class="plan-card chef-card" style="padding:14px 18px; flex-direction:row; align-items:center; gap:10px; text-align:left;">
+                  <span style="font-size:1.4rem;">👨‍🍳</span>
+                  <div>
+                    <div style="font-weight:700; font-size:0.9rem; color:var(--dark);">Con cocinero</div>
+                    <div style="font-size:0.75rem; color:var(--gray);">+$200.000 por día</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- Sección 5: Mensaje -->
+            <div class="form-section-title">💬 <span data-es="Mensaje adicional" data-en="Additional message">Mensaje adicional</span></div>
+
+            <div class="form-group">
+              <label class="form-label" data-es="¿Algo más que debamos saber?" data-en="Anything else we should know?">¿Algo más que debamos saber?</label>
+              <textarea name="mensaje" class="form-control" rows="4"
+                data-es-placeholder="Cuéntanos sobre tu grupo, necesidades especiales, actividades que planean hacer, si traen niños, mascotas, etc."
+                data-en-placeholder="Tell us about your group, special needs, planned activities, if you're bringing children, pets, etc."
+                placeholder="Cuéntanos sobre tu grupo, necesidades especiales, actividades que planean hacer..."></textarea>
+            </div>
+
+            <div class="alert alert-info">
+              <span>💡</span>
+              <span data-es="También puedes contratar servicio de cocina a través de nosotros. Menciónalo en tu mensaje." data-en="You can also hire cooking staff through us. Mention it in your message.">
+                También puedes contratar servicio de cocina a través de nosotros. Menciónalo en tu mensaje.
+              </span>
+            </div>
+          </div>
+
+          <div class="form-submit-area">
+            <button type="submit" class="form-submit-btn" style="background: var(--ocean);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2 21l1.65-4.82A9 9 0 1 1 6.18 19.3zm4.34-2.46a7 7 0 1 0-1.1-1.07l-.64 1.86z"/></svg>
+              <span data-es="Enviar solicitud de reserva" data-en="Submit booking request">Enviar solicitud de reserva</span>
+            </button>
+            <p class="form-submit-note" data-es="Te contactaremos por WhatsApp y correo para confirmar tu reserva." data-en="We'll contact you via WhatsApp and email to confirm your booking.">
+              Te contactaremos por WhatsApp y correo para confirmar tu reserva.
+            </p>
+          </div>
+        </form>
+
+        <!-- MENSAJE DE VERIFICACIÓN INLINE -->
+        <div class="booking-success" id="bookingSuccess">
+          <div class="booking-success__header">
+            <div class="booking-success__check">✅</div>
+            <div class="booking-success__title" data-es="¡Solicitud enviada!" data-en="Request submitted!">¡Solicitud enviada!</div>
+            <div class="booking-success__sub" data-es="Hemos recibido tu solicitud y nos pondremos en contacto contigo pronto." data-en="We've received your request and will contact you shortly.">
+              Hemos recibido tu solicitud y nos pondremos en contacto contigo pronto.
+            </div>
+          </div>
+          <div class="booking-success__body">
+            <div class="booking-success__summary" id="bookingSummary">
+              <!-- Llenado dinámicamente por JS -->
+            </div>
+            <p style="font-size:0.875rem; color:var(--gray); margin-bottom:16px;" data-es="Recibirás confirmación por los siguientes canales:" data-en="You'll receive confirmation via:">
+              Recibirás confirmación por los siguientes canales:
+            </p>
+            <div class="booking-success__channels">
+              <a href="#" id="successWhatsApp" target="_blank" rel="noopener" class="booking-success__channel ch-whatsapp">
+                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>Confirmar por WhatsApp</span>
+              </a>
+              <div class="booking-success__channel ch-email" id="successEmail" style="cursor:default;">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
+                <span id="successEmailText">Correo: —</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="fade-in-right">
+
+        <!-- Cabin preview -->
+        <div class="sidebar-card">
+          <div class="sidebar-card__body" style="padding-top:24px;">
+            <div class="cabin-preview" style="position:relative; overflow:hidden;">
+              <img
+                src="https://lh3.googleusercontent.com/pw/AP1GczOjeejTLaBziCuPrAIg9hHDadsrb71URt500aq48Ews8EsRSk8UyoLqhEifCIBCMFByqLewMNvr1rTJlbxPhz9zVgLM6LUIuJqdBFsh2BsvMTTqjYxdAQa3mU36nuGjVqK6h_9mID77gTYfGnnlLeQ=w700-h400-s-no-gm"
+                alt="Cabaña La Gabriela"
+                loading="lazy"
+                style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"
+              >
+            </div>
+            <div class="cabin-meta">
+              <div class="cabin-meta__item">
+                <span>📍</span>
+                <div>
+                  <strong data-es="Cabaña La Gabriela" data-en="Cabaña La Gabriela">Cabaña La Gabriela</strong>
+                  <span data-es="Playa Venado, San Bernardo del Viento" data-en="Playa Venado, San Bernardo del Viento">Playa Venado, San Bernardo del Viento</span>
+                </div>
+              </div>
+              <div class="cabin-meta__item">
+                <span>🛏️</span>
+                <div>
+                  <strong data-es="7 habitaciones · 3 pisos" data-en="7 rooms · 3 floors">7 habitaciones · 3 pisos</strong>
+                  <span data-es="Capacidad: hasta 40+ personas" data-en="Capacity: up to 40+ people">Capacidad: hasta 40+ personas</span>
+                </div>
+              </div>
+              <div class="cabin-meta__item">
+                <span>🌊</span>
+                <div>
+                  <strong data-es="Directamente en la playa" data-en="Directly on the beach">Directamente en la playa</strong>
+                  <span data-es="Frente al mar Caribe colombiano" data-en="Facing the Colombian Caribbean Sea">Frente al mar Caribe colombiano</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Amenities -->
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <div class="sidebar-card__title" data-es="Servicios incluidos" data-en="Included amenities">Servicios incluidos</div>
+          </div>
+          <div class="sidebar-card__body">
+            <div class="amenity-mini">
+              <div class="amenity-mini__item"><span>🌊</span> <span data-es="Frente al mar" data-en="Beachfront">Frente al mar</span></div>
+              <div class="amenity-mini__item"><span>❄️</span> <span data-es="Aire acondicionado" data-en="A/C">Aire acondicionado</span></div>
+              <div class="amenity-mini__item"><span>🍳</span> <span data-es="Cocina equipada" data-en="Kitchen">Cocina equipada</span></div>
+              <div class="amenity-mini__item"><span>🚗</span> <span data-es="Parqueadero" data-en="Parking">Parqueadero</span></div>
+              <div class="amenity-mini__item"><span>☀️</span> <span data-es="Asoleadero" data-en="Sun deck">Asoleadero</span></div>
+              <div class="amenity-mini__item"><span>📺</span> <span data-es="Televisión" data-en="TV">Televisión</span></div>
+              <div class="amenity-mini__item"><span>👨‍🍳</span> <span data-es="Chef disponible" data-en="Chef available">Chef disponible</span></div>
+              <div class="amenity-mini__item"><span>🏖️</span> <span data-es="Acceso directo playa" data-en="Beach access">Acceso directo playa</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick contact -->
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <div class="sidebar-card__title" data-es="Contacto directo" data-en="Direct contact">Contacto directo</div>
+          </div>
+          <div class="sidebar-card__body">
+            <div class="quick-contact">
+              <!-- WhatsApp -->
+              <a href="https://wa.me/573137549732" target="_blank" rel="noopener"
+                 class="quick-contact__link whatsapp"
+                 style="background:#25D366; border-color:#25D366; color:white;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <div>
+                  <div style="font-size:0.7rem; opacity:0.85; font-weight:400;">WhatsApp</div>
+                  <div>+57 313 754 9732</div>
+                </div>
+              </a>
+              <!-- Instagram -->
+              <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener"
+                 class="quick-contact__link"
+                 style="background:linear-gradient(135deg,#833AB4,#C13584,#E1306C); border-color:transparent; color:white;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <div>
+                  <div style="font-size:0.7rem; opacity:0.85; font-weight:400;">Instagram</div>
+                  <div>@lagabriela06</div>
+                </div>
+              </a>
+              <!-- TikTok -->
+              <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener"
+                 class="quick-contact__link"
+                 style="background:#010101; border-color:#EE1D52; color:white;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+                <div>
+                  <div style="font-size:0.7rem; opacity:0.85; font-weight:400;">TikTok</div>
+                  <div>@la_gabriela06</div>
+                </div>
+              </a>
+              <!-- Facebook -->
+              <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener"
+                 class="quick-contact__link"
+                 style="background:#1877F2; border-color:#1877F2; color:white;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <div>
+                  <div style="font-size:0.7rem; opacity:0.85; font-weight:400;">Facebook</div>
+                  <div>Cabaña La Gabriela</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="sidebar-card">
+          <div class="sidebar-card__header">
+            <div class="sidebar-card__title" data-es="Preguntas frecuentes" data-en="FAQ">Preguntas frecuentes</div>
+          </div>
+          <div class="sidebar-card__body" style="padding-top:8px; padding-bottom:8px;">
+            <div class="faq-item">
+              <div class="faq-q" data-es="¿Cómo confirmo la reserva?" data-en="How do I confirm my booking?">¿Cómo confirmo la reserva?</div>
+              <div class="faq-a" data-es="Te contactaremos por WhatsApp para acordar detalles. La reserva se confirma con un depósito." data-en="We'll contact you via WhatsApp to agree on details. Booking is confirmed with a deposit.">Te contactaremos por WhatsApp para acordar detalles. La reserva se confirma con un depósito.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" data-es="¿Se puede reservar solo habitaciones?" data-en="Can I book individual rooms?">¿Se puede reservar solo habitaciones?</div>
+              <div class="faq-a" data-es="Sí, puedes reservar habitaciones específicas o la cabaña completa. Consúltalo en el formulario." data-en="Yes, you can book specific rooms or the entire cabin. Select it in the form.">Sí, puedes reservar habitaciones específicas o la cabaña completa.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" data-es="¿Hay servicio de cocina?" data-en="Is there a cooking service?">¿Hay servicio de cocina?</div>
+              <div class="faq-a" data-es="Puedes contratar personas para la cocina. Menciónalo en tu mensaje y lo coordinamos." data-en="You can hire cooking staff. Mention it in your message and we'll coordinate.">Puedes contratar personas para la cocina. Menciónalo en tu mensaje.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" data-es="¿Hay parqueadero?" data-en="Is there parking?">¿Hay parqueadero?</div>
+              <div class="faq-a" data-es="Sí, contamos con parqueadero disponible para los huéspedes." data-en="Yes, we have parking available for guests.">Sí, contamos con parqueadero para los huéspedes.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sidebar -->
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER (simplified) -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <span class="logo-text">🌴 La Gabriela</span>
+        <p>Tu cabaña tropical frente al Caribe en San Bernardo del Viento.</p>
+        <div class="footer__socials">
+          <a href="https://wa.me/573137549732" target="_blank" rel="noopener" class="footer__social-link sl-whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com/lagabriela06" target="_blank" rel="noopener" class="footer__social-link sl-instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://tiktok.com/@la_gabriela06" target="_blank" rel="noopener" class="footer__social-link sl-tiktok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.21 8.21 0 0 0 4.79 1.52V6.76a4.85 4.85 0 0 1-1.02-.07z"/></svg>
+            TikTok
+          </a>
+          <a href="https://facebook.com/CabañaLaGabriela" target="_blank" rel="noopener" class="footer__social-link sl-facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="lugares.html">Lugares</a></li>
+          <li><a href="como-llegar.html">Cómo Llegar</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <div class="footer__contact-item"><span>📱</span><a href="https://wa.me/573137549732">+57 313 754 9732</a></div>
+        <div class="footer__contact-item"><span>📷</span><a href="https://instagram.com/lagabriela06">@lagabriela06</a></div>
+      </div>
+      <div class="footer__col">
+        <h4>Ubicación</h4>
+        <div class="footer__contact-item"><span>📍</span><span>Playa Venado, San Bernardo del Viento, Córdoba</span></div>
+      </div>
+    </div>
+    <div class="footer__bottom"><p>© 2025 Cabaña La Gabriela</p></div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<div class="whatsapp-float">
+  <div class="whatsapp-float__bubble">¡Escríbenos!</div>
+  <a href="https://wa.me/573137549732?text=Hola%2C%20me%20interesa%20la%20Caba%C3%B1a%20La%20Gabriela%20%F0%9F%8C%B4" target="_blank" rel="noopener" class="whatsapp-float__btn" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+<button class="scroll-top" aria-label="Volver arriba">↑</button>
+<script src="js/main.js"></script>
+<script>
+/* ============================================================
+   CALENDARIO DE DISPONIBILIDAD
+   ============================================================ */
+
+const PLAN_COLORS = {
+  piso1:    { bg: '#FFF3E0', border: '#FFB703', label: 'Piso 1' },
+  piso2:    { bg: '#E3F2FD', border: '#1D6FA6', label: '2° Piso' },
+  completa: { bg: '#FCE4EC', border: '#E63946', label: 'Cabaña completa' },
+};
+
+let calYear, calMonth;
+
+function calInit() {
+  const now = new Date();
+  calYear  = now.getFullYear();
+  calMonth = now.getMonth();
+  renderCalendar();
+}
+
+function calPrevMonth() {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function calNextMonth() {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function getBookedDates() {
+  const reservas = JSON.parse(localStorage.getItem('cabana_reservas') || '[]');
+  // Mapa: 'YYYY-MM-DD' -> array de planes reservados
+  const map = {};
+  reservas.forEach(r => {
+    if (!r.fecha_entrada || !r.fecha_salida) return;
+    const plan   = r.modalidad || r.plan || 'completa';
+    let   cursor = new Date(r.fecha_entrada + 'T00:00:00');
+    const end    = new Date(r.fecha_salida  + 'T00:00:00');
+    while (cursor < end) {
+      const key = cursor.toISOString().slice(0, 10);
+      if (!map[key]) map[key] = [];
+      if (!map[key].includes(plan)) map[key].push(plan);
+      cursor.setDate(cursor.getDate() + 1);
+    }
+  });
+  return map;
+}
+
+function renderCalendar() {
+  const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                      'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('calTitle').textContent = monthNames[calMonth] + ' ' + calYear;
+
+  const booked  = getBookedDates();
+  const today   = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Dom
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  const container = document.getElementById('calDays');
+  container.innerHTML = '';
+
+  // Celdas vacías antes del día 1
+  for (let i = 0; i < firstDay; i++) {
+    container.insertAdjacentHTML('beforeend', '<div style="border:1px solid #f0f0f0; min-height:52px;"></div>');
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = calYear + '-' +
+      String(calMonth + 1).padStart(2, '0') + '-' +
+      String(d).padStart(2, '0');
+    const dayDate = new Date(dateStr + 'T00:00:00');
+    const isPast  = dayDate < today;
+    const plans   = booked[dateStr] || [];
+
+    let bg = '#fff', border = '#f0f0f0', tooltip = '', badgeHtml = '';
+
+    if (plans.length > 0) {
+      if (plans.includes('completa')) {
+        bg = PLAN_COLORS.completa.bg;
+        border = PLAN_COLORS.completa.border;
+        tooltip = 'Cabaña completa reservada';
+        badgeHtml = '<div style="font-size:0.55rem; font-weight:700; color:#C1121F; margin-top:2px; line-height:1;">COMPLETA</div>';
+      } else {
+        const colors = plans.map(p => PLAN_COLORS[p] || PLAN_COLORS.completa);
+        bg = colors[0].bg;
+        border = colors[0].border;
+        tooltip = plans.map(p => (PLAN_COLORS[p]?.label || p) + ' reservado').join(', ');
+        badgeHtml = plans.map(p => {
+          const c = PLAN_COLORS[p] || {};
+          return '<div style="font-size:0.5rem; font-weight:700; color:' + (c.border||'#333') + '; line-height:1.2;">' + (c.label || p) + '</div>';
+        }).join('');
+      }
+    }
+
+    const isToday = dateStr === today.toISOString().slice(0, 10);
+    const todayStyle = isToday ? 'font-weight:800; color:var(--ocean);' : '';
+    const pastStyle  = isPast  ? 'opacity:0.4;' : '';
+
+    container.insertAdjacentHTML('beforeend', `
+      <div title="${tooltip}" style="
+        border:1px solid ${border};
+        background:${bg};
+        min-height:52px;
+        padding:6px 4px;
+        text-align:center;
+        ${pastStyle}
+        cursor:${plans.length && !isPast ? 'help' : 'default'};
+        transition:box-shadow 0.15s;
+      ">
+        <div style="font-size:0.82rem; ${todayStyle}">${d}</div>
+        ${badgeHtml}
+      </div>
+    `);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', calInit);
+</script>
+</body>
+</html>

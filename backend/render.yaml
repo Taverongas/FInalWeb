@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: cabana-la-gabriela-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ADMIN_PASSWORD_HASH
+        generateValue: true   # Cambiar por hash SHA-256 de tu contraseña real
+      - key: DB_PATH
+        value: /data/reservas.db
+    disk:
+      name: reservas-db
+      mountPath: /data
+      sizeGB: 1
